@@ -1,0 +1,32 @@
+{
+  "name": "battleship",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dukdukg00se/battleship.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dukdukg00se/battleship/issues"
+  },
+  "homepage": "https://github.com/dukdukg00se/battleship#readme",
+  "devDependencies": {
+    "css-loader": "^6.7.3",
+    "eslint": "^8.34.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-import": "^2.27.5",
+    "html-webpack-plugin": "^5.5.0",
+    "prettier": "2.8.4",
+    "style-loader": "^3.3.1",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1"
+  }
+}

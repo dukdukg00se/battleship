@@ -1,0 +1,9 @@
+# Mac/OSX
+.DS_Store
+
+# VSCode
+.vscode/*
+!.vscode/settings.json
+
+# Private Node Modules
+node_modules/
