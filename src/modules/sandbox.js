@@ -1,7 +1,8 @@
-/* eslint-disable */
+/* eslint-disable no-console */
+/* eslint-disable max-classes-per-file */
 
 function arryHund() {
-  let arr = [];
+  const arr = [];
   let i = 0;
   while (i < 100) {
     arr.push(i);
@@ -40,10 +41,34 @@ class Gameboard {
     this.availSqs = arryHund();
   }
 
-  receiveAttack() {}
+  receiveAttack(oppCoord) {
+    this.ships.forEach((ship) => {
+      ship.position.forEach((coord) => {
+        if (coord === oppCoord) {
+          ship.hit();
+
+          // console.log(ship);
+          this.madeAttacks.push(oppCoord);
+
+          if (ship.isSunk()) {
+            // console.log('Sunk');
+            console.log(ship);
+          } else {
+            console.log('Alive');
+          }
+        }
+      });
+    });
+
+    this.attacks.push(oppCoord);
+  }
 
   placeShip(ship) {
     this.ships.push(ship);
+  }
+
+  isAllSunk() {
+    return this.ships.every((ship) => ship.sunk === true);
   }
 }
 
@@ -51,15 +76,15 @@ class Player {
   constructor(name) {
     this.name = name;
     this.board = new Gameboard();
+    this.opponent = null;
   }
 
   placeShip(ship) {
     this.board.placeShip(ship);
   }
 
-  attack(player, coord) {
-    player.receiveAttack(coord);
-    this.madeAttacks.push(coord);
+  attack(coord) {
+    this.opponent.board.receiveAttack(coord);
   }
 }
 
