@@ -1,23 +1,19 @@
 import Ship from '../modules/ship';
 
-describe('Verify properties', () => {
-  const carrier = new Ship(5, [1, 2, 3, 4, 5]);
+describe('Ship object', () => {
+  const destroyer = new Ship('Destroyer', [1, 2, 3]);
 
   test('properties', () => {
-    expect(carrier).toEqual({
-      length: 5,
-      position: [1, 2, 3, 4, 5],
+    expect(destroyer).toEqual({
+      name: 'Destroyer',
+      position: [1, 2, 3],
       hits: 0,
     });
   });
-});
 
-describe('Test methods', () => {
-  const destroyer = new Ship(3);
-  destroyer.hit();
-  destroyer.hit();
-
-  test('Hits property', () => {
+  test('hit method', () => {
+    destroyer.hit();
+    destroyer.hit();
     expect(destroyer).toHaveProperty('hits', 2);
   });
 
