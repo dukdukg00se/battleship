@@ -1,14 +1,13 @@
 import Ship from '../modules/ship';
 
-describe('Veryify object', () => {
-  const carrier = new Ship(5);
+describe('Verify properties', () => {
+  const carrier = new Ship(5, [1, 2, 3, 4, 5]);
 
   test('properties', () => {
     expect(carrier).toEqual({
       length: 5,
-      position: [],
+      position: [1, 2, 3, 4, 5],
       hits: 0,
-      sunk: false,
     });
   });
 });
@@ -17,14 +16,17 @@ describe('Test methods', () => {
   const destroyer = new Ship(3);
   destroyer.hit();
   destroyer.hit();
-  destroyer.hit();
 
   test('Hits property', () => {
-    expect(destroyer).toHaveProperty('hits', 3);
+    expect(destroyer).toHaveProperty('hits', 2);
   });
 
-  test('Sunk property', () => {
-    destroyer.isSunk();
-    expect(destroyer).toHaveProperty('sunk', true);
+  test('isSunk shows false', () => {
+    expect(destroyer.isSunk()).toBe(false);
+  });
+
+  test('isSunk shows true', () => {
+    destroyer.hit();
+    expect(destroyer.isSunk()).toBe(true);
   });
 });
