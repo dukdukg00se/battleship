@@ -1,5 +1,3 @@
-/* eslint-disable jest/expect-expect */
-/* eslint-disable jest/no-commented-out-tests */
 import Gameboard from '../modules/board';
 import Ship from '../modules/ship';
 
