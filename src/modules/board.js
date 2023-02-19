@@ -1,6 +1,6 @@
-class Gameboard {
+export default class Gameboard {
   constructor() {
-    this.ships = [];
+    this.fleet = [];
     this.hits = [];
 
     // Add this for AI smart target coord?
@@ -9,12 +9,12 @@ class Gameboard {
     // this.danger = false;
   }
 
-  placeShip(ship) {
-    this.ships.push(ship);
+  addShip(ship) {
+    this.fleet.push(ship);
   }
 
   receiveAttack(oppCoord) {
-    this.ships.forEach((ship) => {
+    this.fleet.forEach((ship) => {
       ship.position.forEach((coord) => {
         if (coord === oppCoord) {
           this.hits.push(oppCoord);
@@ -22,7 +22,7 @@ class Gameboard {
           if (ship.isSunk()) {
             this.shipsLost += 1;
             if (this.isAllSunk()) {
-              console.log('No ships left');
+              // console.log('No ships left');
             }
           }
         }
@@ -30,13 +30,7 @@ class Gameboard {
     });
   }
 
-  // isAllSunk() {
-  //   return this.ships.every((ship) => ship.sunk === true);
-  // }
-
   isAllSunk() {
-    return this.shipsLost.length === this.ships.length;
+    return this.shipsLost >= this.fleet.length;
   }
 }
-
-export default Gameboard;
