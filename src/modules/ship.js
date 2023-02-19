@@ -1,22 +1,17 @@
-class Ship {
-  constructor(length, coord) {
-    this.length = length;
+export default class Ship {
+  constructor(name, coord = []) {
+    this.name = name;
     this.position = coord;
-    this.hits = 0;
-    this.sunk = false;
+    this.damage = 0;
+    // Keep track of sunk ships in board module
+    // this.sunk = false;
   }
 
   hit() {
-    this.hits += 1;
+    this.damage += 1;
   }
 
   isSunk() {
-    if (this.hits >= this.length) {
-      this.sunk = true;
-      return this.sunk;
-    }
-    return false;
+    return this.damage >= this.position.length;
   }
 }
-
-export default Ship;
