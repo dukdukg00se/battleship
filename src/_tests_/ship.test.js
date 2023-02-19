@@ -7,14 +7,14 @@ describe('Ship object', () => {
     expect(destroyer).toEqual({
       name: 'Destroyer',
       position: [1, 2, 3],
-      hits: 0,
+      damage: 0,
     });
   });
 
   test('hit method', () => {
     destroyer.hit();
     destroyer.hit();
-    expect(destroyer).toHaveProperty('hits', 2);
+    expect(destroyer).toHaveProperty('damage', 2);
   });
 
   test('isSunk shows false', () => {
