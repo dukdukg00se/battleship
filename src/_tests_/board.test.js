@@ -1,66 +1,81 @@
+/* eslint-disable jest/expect-expect */
+/* eslint-disable jest/no-commented-out-tests */
 import Gameboard from '../modules/board';
+import Ship from '../modules/ship';
 
-const mockShip = jest
-  .fn()
-  .mockReturnValue({
-    name: 'Destroyer',
-    position: [1, 2, 3],
-    hits: 0,
-  })
-  .mockReturnValueOnce({
-    name: 'Patrol Boat',
-    position: [4, 5],
-    hits: 0,
-  })
-  .mockReturnValueOnce({
-    name: 'Submarine',
-    position: [6, 7, 8],
-    hits: 0,
-  });
-
-describe('Gameboard object', () => {
+describe('Board object', () => {
   let board;
+  let ship1;
+  let ship2;
 
-  beforeAll(() => {
+  beforeEach(() => {
     board = new Gameboard();
+    ship1 = new Ship('a', [1, 2]);
+    ship2 = new Ship('b', [3, 4]);
   });
 
-  test('placeShip method', () => {
-    board.placeShip(mockShip());
-    board.placeShip(mockShip());
-    board.placeShip(mockShip());
+  test('Board properties', () => {
+    expect(board).toEqual({
+      fleet: [],
+      hits: [],
+      shipsLost: 0,
+    });
+  });
+
+  test('Adding ship updates fleet property', () => {
+    board.addShip(ship1);
+    board.addShip(ship2);
 
     expect(board).toEqual({
-      ships: [
+      fleet: [
         {
-          name: 'Patrol Boat',
-          position: [4, 5],
-          hits: 0,
+          name: 'a',
+          position: [1, 2],
+          damage: 0,
         },
         {
-          name: 'Submarine',
-          position: [6, 7, 8],
-          hits: 0,
-        },
-        {
-          name: 'Destroyer',
-          position: [1, 2, 3],
-          hits: 0,
+          name: 'b',
+          position: [3, 4],
+          damage: 0,
         },
       ],
       hits: [],
       shipsLost: 0,
     });
   });
+
+  describe('What happens when attacked', () => {
+    beforeEach(() => {
+      board.addShip(ship1);
+    });
+
+    test('Correctly log hits', () => {
+      board.receiveAttack(21);
+      board.receiveAttack(2);
+      expect(board).toHaveProperty('hits', [2]);
+    });
+
+    test('Check if ship sunk after a hit', () => {
+      const isSunkCalled = jest.spyOn(ship1, 'isSunk');
+      board.receiveAttack(2);
+      expect(isSunkCalled).toHaveBeenCalled();
+    });
+
+    test('Checks fleet only after ship is sunk', () => {
+      const allSunk = jest.spyOn(board, 'isAllSunk');
+      board.receiveAttack(1);
+      board.receiveAttack(2);
+      expect(allSunk).toHaveBeenCalledTimes(1);
+    });
+
+    test('Correctly tell when fleet eliminated', () => {
+      board.receiveAttack(1);
+      let allSunk = board.isAllSunk();
+      expect(allSunk).toBe(false);
+
+      board.receiveAttack(2);
+      allSunk = board.isAllSunk();
+      expect(allSunk).toBe(true);
+    });
+  });
 });
-
-// test placeShip places ship into ships array
-// mock a ships obj
-
-// test receiveAttack has attack coord
-// searches ships coords within ships arr
-// If attack coord found
-// add a hit to the ship
-// check if sunk
-// if yes, shipsLost++
-// check if all ships sunk
