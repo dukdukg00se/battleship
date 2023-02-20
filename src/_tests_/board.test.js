@@ -1,7 +1,7 @@
 import Gameboard from '../modules/board';
 import Ship from '../modules/ship';
 
-describe('Board object', () => {
+describe('Gameboard object', () => {
   let board;
   let ship1;
   let ship2;
@@ -12,33 +12,37 @@ describe('Board object', () => {
     ship2 = new Ship('b', [3, 4]);
   });
 
-  test('Board properties', () => {
-    expect(board).toEqual({
-      fleet: [],
-      hits: [],
-      shipsLost: 0,
+  describe('Board', () => {
+    test('Properties', () => {
+      expect(board).toEqual({
+        fleet: [],
+        hits: [],
+        shipsLost: 0,
+      });
     });
   });
 
-  test('Adding ship updates fleet property', () => {
-    board.addShip(ship1);
-    board.addShip(ship2);
+  describe('Adding ships', () => {
+    test('Fleet property', () => {
+      board.addShip(ship1);
+      board.addShip(ship2);
 
-    expect(board).toEqual({
-      fleet: [
-        {
-          name: 'a',
-          position: [1, 2],
-          damage: 0,
-        },
-        {
-          name: 'b',
-          position: [3, 4],
-          damage: 0,
-        },
-      ],
-      hits: [],
-      shipsLost: 0,
+      expect(board).toEqual({
+        fleet: [
+          {
+            name: 'a',
+            position: [1, 2],
+            damage: 0,
+          },
+          {
+            name: 'b',
+            position: [3, 4],
+            damage: 0,
+          },
+        ],
+        hits: [],
+        shipsLost: 0,
+      });
     });
   });
 
