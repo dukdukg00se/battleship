@@ -72,15 +72,16 @@ class AIPlayer extends Player {
 
   targetDir = 'back';
 
-  getFloor(num, axis) {
-    if (axis === 'x') return Math.floor(num / 10) * 10 + 1;
+  // Change to xAxis
+  getFloor(num, xAxis) {
+    if (xAxis) return Math.floor(num / 10) * 10 + 1;
     if (num % 10 === 0) return 10;
     if (num <= 10) return num;
     return num - Math.floor(num / 10) * 10;
   }
 
-  getCeiling(num, axis) {
-    if (axis === 'x') return Math.ceil(num / 10) * 10;
+  getCeiling(num, xAxis) {
+    if (xAxis) return Math.ceil(num / 10) * 10;
     if (num % 10 === 0) return 100;
     return num + (100 - Math.ceil(num / 10) * 10);
   }
@@ -88,9 +89,9 @@ class AIPlayer extends Player {
   getGuidedCoord(ship, dir = this.targetDir, excl = this.attacks) {
     let coord;
     const indx = dir === 'back' || dir === 'down' ? ship.damage.length - 1 : 0;
-    const axis = dir === 'back' || dir === 'front' ? 'x' : 'y';
-    const floor = this.getFloor(ship.damage[indx], axis);
-    const ceil = this.getCeiling(ship.damage[indx], axis);
+    const isXAxis = dir === 'back' || dir === 'front';
+    const floor = this.getFloor(ship.damage[indx], isXAxis);
+    const ceil = this.getCeiling(ship.damage[indx], isXAxis);
 
     if (dir === 'back') {
       coord = ship.damage[indx] + 1;
@@ -127,7 +128,7 @@ class AIPlayer extends Player {
     return coord;
   }
 
-  getRandomCoord(gridSize = 100, exclude = this.attacks) {
+  getRandomCoord(exclude = this.attacks, gridSize = 100) {
     let coord = Math.floor(Math.random() * gridSize);
     while (exclude.includes(coord)) {
       coord = Math.floor(Math.random() * gridSize);
@@ -135,7 +136,7 @@ class AIPlayer extends Player {
     return coord;
   }
 
-  logAttack(opp, targetCoord) {
+  getAttackResults(opp, targetCoord) {
     const targetNames = this.targets.reduce((names, oppShip) => {
       names.push(oppShip.name);
       return names;
@@ -188,32 +189,79 @@ class AIPlayer extends Player {
     else targetCoord = this.getGuidedCoord(targets[0]);
 
     this.attack(opp, targetCoord);
-    this.logAttack(opp, targetCoord);
+    this.getAttackResults(opp, targetCoord);
+  }
+
+  assembleFleet() {
+    const takenPosits = [];
+    const allShips = [
+      new Ship('carrier', 5),
+      new Ship('battleship', 4),
+      new Ship('patrol', 2),
+      new Ship('destroyter', 3),
+      new Ship('submarine', 3),
+    ];
+
+    allShips.forEach((ship) => {
+      const xAxis = !!Math.round(Math.random());
+      let startCoord = this.getRandomCoord(takenPosits);
+      let ceil = this.getCeiling(startCoord, xAxis);
+      // console.log(startCoord);
+
+      if (xAxis) {
+        while (startCoord + ship.length - 1 > ceil) {
+          startCoord = this.getRandomCoord(takenPosits);
+          ceil = this.getCeiling(startCoord, xAxis);
+        }
+      } else {
+        while (startCoord + ship.length * 10 > ceil) {
+          startCoord = this.getRandomCoord(takenPosits);
+          ceil = this.getCeiling(startCoord, xAxis);
+        }
+      }
+
+      for (let i = 0; i < ship.length; i += 1) {
+        let coord;
+
+        if (xAxis) {
+          coord = startCoord + i;
+        } else {
+          coord = startCoord + i * 10;
+        }
+        takenPosits.push(coord);
+        ship.position.push(coord);
+      }
+
+      this.board.addShip(ship);
+    });
   }
 }
 
 /* ---------------------------------- */
 
-const carrier1 = new Ship('Carrier', 5);
-const battleship1 = new Ship('Battleship', 4);
-const patrolBoat1 = new Ship('Patrol', 2);
-const destroyer1 = new Ship('Destroyter', 3);
-const sub1 = new Ship('Submarine', 3);
+// const carrier1 = new Ship('Carrier', 5);
+// const battleship1 = new Ship('Battleship', 4);
+// const patrolBoat1 = new Ship('Patrol', 2);
+// const destroyer1 = new Ship('Destroyter', 3);
+// const sub1 = new Ship('Submarine', 3);
 
-carrier1.position = [1, 2, 3, 4, 5];
-battleship1.position = [6, 7, 8, 9];
-patrolBoat1.position = [36, 46];
-destroyer1.position = [33, 34, 35];
-sub1.position = [17, 27, 37];
+// carrier1.position = [1, 2, 3, 4, 5];
+// battleship1.position = [6, 7, 8, 9];
+// patrolBoat1.position = [36, 46];
+// destroyer1.position = [33, 34, 35];
+// sub1.position = [17, 27, 37];
 
-const player1 = new Player('Will');
+// const player1 = new Player('Will');
+const player1 = new AIPlayer();
 const player2 = new AIPlayer();
+player1.assembleFleet();
+player2.assembleFleet();
 
-player1.board.addShip(carrier1);
-player1.board.addShip(battleship1);
-player1.board.addShip(patrolBoat1);
-player1.board.addShip(destroyer1);
-player1.board.addShip(sub1);
+// player1.board.addShip(carrier1);
+// player1.board.addShip(battleship1);
+// player1.board.addShip(patrolBoat1);
+// player1.board.addShip(destroyer1);
+// player1.board.addShip(sub1);
 
 // player2.board.addShip(battleship2);
 // player2.board.addShip(patrolBoat2);
@@ -226,10 +274,29 @@ player1.board.addShip(sub1);
 // player1.attack(player2, 9);
 player2.autoAttack(player1);
 player2.autoAttack(player1);
+player2.autoAttack(player1);
+player2.autoAttack(player1);
+player2.autoAttack(player1);
+player2.autoAttack(player1);
+player2.autoAttack(player1);
+player2.autoAttack(player1);
+player2.autoAttack(player1);
+player2.autoAttack(player1);
+player2.autoAttack(player1);
+player2.autoAttack(player1);
+player2.autoAttack(player1);
+player2.autoAttack(player1);
+player2.autoAttack(player1);
+player2.autoAttack(player1);
 
 // console.log(player2.board.shipsLost);
 // console.log('Player2: ', player2.board.fleet);
 console.log(player1);
+console.log('--------------------------------');
 console.log(player2);
+console.log('--------------------------------');
+console.log(player1.board.fleet);
+// console.log('--------------------------------');
+// console.log(player2.board.fleet);
 // console.log('Player1: ', player1.board.fleet);
 // console.log(player2.board.isAllSunk());
