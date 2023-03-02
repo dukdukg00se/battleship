@@ -1,27 +1,17 @@
 export default class Gameboard {
   constructor() {
     this.fleet = [];
-    this.hits = [];
-
-    // Add this for AI smart target coord?
-    // Remove sunk property from ship and add shiplsLost?
-    this.shipsLost = 0;
-    // this.danger = false;
+    this.shipsLost = [];
   }
 
-  addShip(ship) {
-    this.fleet.push(ship);
-  }
-
-  receiveAttack(oppCoord) {
+  receiveAttack(incoming) {
     this.fleet.forEach((ship) => {
       ship.position.forEach((coord) => {
-        if (coord === oppCoord) {
-          this.hits.push(oppCoord);
-          ship.hit();
+        if (coord === incoming) {
+          ship.hit(incoming);
           if (ship.isSunk()) {
-            this.shipsLost += 1;
-            if (this.isAllSunk()) {
+            this.shipsLost.push(ship);
+            if (this.fleetLost()) {
               // console.log('No ships left');
             }
           }
@@ -30,7 +20,7 @@ export default class Gameboard {
     });
   }
 
-  isAllSunk() {
-    return this.shipsLost >= this.fleet.length;
+  fleetLost() {
+    return this.shipsLost.length >= this.fleet.length;
   }
 }
