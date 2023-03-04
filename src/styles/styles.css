@@ -1,0 +1,86 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+}
+
+html {
+  font-size: 62.5%;
+  /* --light-text: white;
+  --dark-bkgrnd: black;
+  --broken-clouds: #87c4eb;
+  --sunny: #0c8dc0;
+  --night: #143d86;
+  --rainy-day: #9ab4d1;
+  --rainy-night: #415f7f;
+  --snowy-day: #8bbee6;
+  --snowy-night: #2f1463;
+  --sand-mist: #68382d; */
+}
+
+body {
+  /* background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+  background-image: url(../assets/images/wallpapers/cloudy-d.svg);
+  font-size: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: var(--light-text);
+  font-family: sans-serif;
+  padding: 3% 0;
+  min-width: 275px;
+  min-height: 100vh; */
+
+  background: linear-gradient(
+    180deg,
+    rgb(8, 0, 144) 0%,
+    rgb(0, 0, 135) 33%,
+    rgb(0, 0, 110) 66%
+  );
+}
+
+header {
+  height: 15vh;
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+  border: solid 2px white;
+}
+
+header > div {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+header > div > img:first-of-type {
+  object-fit: scale-down;
+  object-position: center;
+  height: 100%;
+  width: 80%;
+}
+
+.volume-up {
+  position: absolute;
+  top: 40%;
+  right: 0%;
+  fill: #f0f0f2;
+  width: 5%;
+  height: 20%;
+  max-width: 33px;
+}
+
+/* For ship silhouette over logo */
+.ship-logo {
+  position: absolute;
+  height: 71%;
+  width: 34%;
+  transform: rotate(-2deg);
+  top: 27px;
+}
