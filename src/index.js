@@ -32,3 +32,7 @@
 
 import './styles/reset.css';
 import './styles/styles.css';
+import form from './modules/display-form';
+
+const main = document.querySelector('main');
+main.append(form());

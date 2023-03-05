@@ -2,7 +2,8 @@
   box-sizing: border-box;
 }
 
-html {
+html,
+body {
   height: 100%;
 }
 
@@ -10,14 +11,7 @@ html {
   font-size: 62.5%;
   /* --light-text: white;
   --dark-bkgrnd: black;
-  --broken-clouds: #87c4eb;
-  --sunny: #0c8dc0;
-  --night: #143d86;
-  --rainy-day: #9ab4d1;
-  --rainy-night: #415f7f;
-  --snowy-day: #8bbee6;
-  --snowy-night: #2f1463;
-  --sand-mist: #68382d; */
+ */
 }
 
 body {
@@ -36,7 +30,11 @@ body {
   padding: 3% 0;
   min-width: 275px;
   min-height: 100vh; */
-
+  display: flex;
+  flex-direction: column;
+  color: #f0f0f2;
+  font-size: 3rem;
+  font-family: 'Bebas Neue', cursive;
   background: linear-gradient(
     180deg,
     rgb(8, 0, 144) 0%,
@@ -47,6 +45,7 @@ body {
 
 header {
   height: 15vh;
+  min-height: 10rem;
   display: flex;
   justify-content: center;
   padding: 2rem;
@@ -57,6 +56,7 @@ header > div {
   position: relative;
   display: flex;
   justify-content: center;
+  width: 80%;
 }
 
 header > div > img:first-of-type {
@@ -68,19 +68,69 @@ header > div > img:first-of-type {
 
 .volume-up {
   position: absolute;
-  top: 40%;
+  top: 60%;
   right: 0%;
   fill: #f0f0f2;
-  width: 5%;
-  height: 20%;
-  max-width: 33px;
+  width: 6%;
+  max-width: 3.2rem;
+  /* height: 20%;
+  max-width: 33px; */
 }
 
 /* For ship silhouette over logo */
-.ship-logo {
+/* .ship-logo {
   position: absolute;
   height: 71%;
   width: 34%;
   transform: rotate(-2deg);
   top: 27px;
+} */
+
+main {
+  display: flex;
+  justify-content: center;
+  padding-top: 10%;
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  /* min-width: 21rem; */
+  animation: 6s ease-in 0s 1 normal none running fadein;
+}
+
+label[for='input-name'] {
+  font-size: 3.7vw;
+}
+
+#input-name {
+  height: 7vw;
+  font-family: 'Bebas Neue', cursive;
+  font-size: 3.5vw;
+  padding: 1rem;
+}
+
+form > p {
+  color: red;
+  font-size: 3.7vw;
+  visibility: hidden;
+}
+
+form > button {
+  height: 7vw;
+  padding: 1vw;
+  border-radius: 4px;
+  font-family: 'Bebas Neue', cursive;
+  font-size: 3.5vw;
 }
