@@ -77,19 +77,10 @@ header > div > img:first-of-type {
   max-width: 33px; */
 }
 
-/* For ship silhouette over logo */
-/* .ship-logo {
-  position: absolute;
-  height: 71%;
-  width: 34%;
-  transform: rotate(-2deg);
-  top: 27px;
-} */
-
 main {
   display: flex;
   justify-content: center;
-  padding-top: 10%;
+  padding-top: 10vmin;
 }
 
 @keyframes fadein {
@@ -106,31 +97,90 @@ form {
   flex-direction: column;
   align-items: center;
   gap: 2rem;
-  /* min-width: 21rem; */
   animation: 6s ease-in 0s 1 normal none running fadein;
-}
-
-label[for='input-name'] {
-  font-size: 3.7vw;
+  font-size: 3vmin;
 }
 
 #input-name {
-  height: 7vw;
   font-family: 'Bebas Neue', cursive;
-  font-size: 3.5vw;
+  font-size: 3vmin;
   padding: 1rem;
 }
 
 form > p {
   color: red;
-  font-size: 3.7vw;
   visibility: hidden;
 }
 
 form > button {
-  height: 7vw;
-  padding: 1vw;
+  height: 5.5vmin;
+  width: 14vmin;
+  padding: 0.5vmin;
   border-radius: 4px;
   font-family: 'Bebas Neue', cursive;
-  font-size: 3.5vw;
+  font-size: 2.8vmin;
 }
+
+@media (max-width: 675px), (max-height: 680px) {
+  form {
+    font-size: 2rem;
+  }
+
+  #input-name {
+    height: 4.6rem;
+    width: 19rem;
+    font-size: 2rem;
+  }
+
+  form > button {
+    height: 3.7rem;
+    width: 9rem;
+    font-size: 1.9rem;
+  }
+}
+
+/* @media (min-width: 1100px) {
+  main {
+    padding-top: 11rem;
+  }
+  form {
+    font-size: 3.3rem;
+  }
+
+  #input-name {
+    height: 6.4rem;
+    width: 31rem;
+    font-size: 3.3rem;
+    padding: 1rem;
+  }
+
+  form > button {
+    height: 6.1rem;
+    width: 15.4rem;
+    padding: 0.5vw;
+    font-size: 3.1rem;
+  }
+}
+
+@media (max-height: 400px) {
+  main {
+    padding-top: 3rem;
+  }
+  form {
+    font-size: 2.7rem;
+  }
+
+  #input-name {
+    height: 4.4rem;
+    width: 31rem;
+    font-size: 2.7rem;
+    padding: 1rem;
+  }
+
+  form > button {
+    height: 4.1rem;
+    width: 15.4rem;
+    padding: 0.5vw;
+    font-size: 2.5rem;
+  }
+} */
