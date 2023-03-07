@@ -1,3 +1,5 @@
+import '../styles/form.css';
+
 export default function createForm() {
   const form = document.createElement('form');
   const nameLabel = document.createElement('label');
@@ -12,8 +14,11 @@ export default function createForm() {
   nameInput.type = 'text';
   nameInput.placeholder = 'BATTLESHIP COMBATANT';
   nameInput.autocomplete = 'off';
+  nameInput.required = true;
   errMsg.textContent = 'PLEASE ENTER A NAME';
   submitBtn.textContent = 'START GAME';
+  submitBtn.type = 'button';
+
   form.append(nameLabel, nameInput, errMsg, submitBtn);
   return form;
 }
