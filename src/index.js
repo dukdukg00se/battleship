@@ -36,3 +36,14 @@ import form from './modules/display-form';
 
 const main = document.querySelector('main');
 main.append(form());
+
+const nameInput = document.getElementById('input-name');
+const submitBtn = document.querySelector('form > button');
+submitBtn.addEventListener('click', () => {
+  const errMsg = document.querySelector('form > p');
+  if (nameInput.validity.valueMissing) {
+    errMsg.style.visibility = 'visible';
+  } else {
+    errMsg.style.visibility = 'hidden';
+  }
+});
