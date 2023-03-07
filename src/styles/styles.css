@@ -36,11 +36,14 @@ body {
   font-size: 3rem;
   font-family: 'Bebas Neue', cursive;
   background: linear-gradient(
-    180deg,
-    rgb(8, 0, 144) 0%,
-    rgb(0, 0, 135) 33%,
-    rgb(0, 0, 110) 66%
+    90deg,
+    rgb(2, 0, 75) 0%,
+    rgb(18, 18, 172) 50%,
+    rgb(2, 0, 75) 100%
   );
+
+  min-width: 355px;
+  min-height: 550px;
 }
 
 header {
@@ -49,7 +52,7 @@ header {
   display: flex;
   justify-content: center;
   padding: 2rem;
-  border: solid 2px white;
+  /* border: solid 2px white; */
 }
 
 header > div {
@@ -66,15 +69,13 @@ header > div > img:first-of-type {
   width: 80%;
 }
 
-.volume-up {
+.volume {
   position: absolute;
   top: 60%;
   right: 0%;
   fill: #f0f0f2;
   width: 6%;
   max-width: 3.2rem;
-  /* height: 20%;
-  max-width: 33px; */
 }
 
 main {
@@ -83,7 +84,7 @@ main {
   padding-top: 10vmin;
 }
 
-@keyframes fadein {
+/* @keyframes fadein {
   from {
     opacity: 0;
   }
@@ -137,50 +138,10 @@ form > button {
     width: 9rem;
     font-size: 1.9rem;
   }
-}
-
-/* @media (min-width: 1100px) {
-  main {
-    padding-top: 11rem;
-  }
-  form {
-    font-size: 3.3rem;
-  }
-
-  #input-name {
-    height: 6.4rem;
-    width: 31rem;
-    font-size: 3.3rem;
-    padding: 1rem;
-  }
-
-  form > button {
-    height: 6.1rem;
-    width: 15.4rem;
-    padding: 0.5vw;
-    font-size: 3.1rem;
-  }
-}
-
-@media (max-height: 400px) {
-  main {
-    padding-top: 3rem;
-  }
-  form {
-    font-size: 2.7rem;
-  }
-
-  #input-name {
-    height: 4.4rem;
-    width: 31rem;
-    font-size: 2.7rem;
-    padding: 1rem;
-  }
-
-  form > button {
-    height: 4.1rem;
-    width: 15.4rem;
-    padding: 0.5vw;
-    font-size: 2.5rem;
-  }
 } */
+
+@media (max-width: 500px), (max-height: 500px) {
+  main {
+    padding-top: 5rem;
+  }
+}
