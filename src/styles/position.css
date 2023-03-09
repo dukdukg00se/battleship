@@ -1,0 +1,92 @@
+.posit-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+}
+
+.posit-container > div:first-child {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.info-wrap {
+  width: 55vmin;
+  height: 9vmin;
+  border: solid 0.1rem white;
+  border-radius: 10px;
+  font-size: 2.3vmin;
+  font-family: monospace;
+  background: #020038;
+  padding: 1rem;
+
+  min-width: 24rem;
+  max-width: 55rem;
+  max-height: 11rem;
+  min-height: 6rem;
+}
+
+.info-wrap + button {
+  height: 4.5vmin;
+  width: 11vmin;
+  padding: 0.5vmin;
+  border-radius: 4px;
+  font-family: 'Bebas Neue', cursive;
+  font-size: 2.5vmin;
+}
+
+/* Position grid styles */
+.grid {
+  display: flex;
+  gap: 1%;
+  width: 50vmin;
+  height: 50vmin;
+  min-width: 25rem;
+  min-height: 25rem;
+  flex-wrap: wrap;
+  /* display: grid;
+  grid-template: repeat(10, 3rem) / repeat(10, 3rem); */
+  max-width: 60rem;
+  max-height: 60rem;
+  justify-content: center;
+}
+
+.sq:hover {
+  background-color: rgba(255, 60, 60, 0.6);
+  cursor: not-allowed;
+}
+
+.sq {
+  width: 9%;
+  height: 9%;
+  border: solid 2px white;
+}
+
+@media (max-width: 434px) {
+  .info-wrap {
+    font-size: 1rem;
+  }
+}
+
+/* .info-wrap h2 {
+  overflow: hidden; 
+  border-right: .15em solid orange; 
+  white-space: nowrap; 
+  margin: 0 auto;
+  letter-spacing: .15em; 
+  animation: 
+    typing 3.5s steps(30, end),
+    blink-caret .5s step-end infinite;
+}
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: orange }
+} */
