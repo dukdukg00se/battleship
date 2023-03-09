@@ -81,9 +81,22 @@ header > div > img:first-of-type {
 main {
   display: flex;
   justify-content: center;
-  padding-top: 10vmin;
+  padding: 8vmin 5rem 5rem;
 }
 
+/* @media (max-width: 500px), (max-height: 500px) {
+  main {
+    padding-top: 5rem;
+  }
+} */
+
+@media (max-height: 500px) {
+  main {
+    padding-top: 3.6rem;
+  }
+}
+
+/* Form styles */
 /* @keyframes fadein {
   from {
     opacity: 0;
@@ -140,8 +153,68 @@ form > button {
   }
 } */
 
-@media (max-width: 500px), (max-height: 500px) {
-  main {
-    padding-top: 5rem;
-  }
+/* Position styles */
+/* .posit-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
 }
+
+.posit-container > div:first-child {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.info-wrap {
+  width: 55vmin;
+  height: 9vmin;
+  border: solid 0.1rem white;
+  border-radius: 10px;
+  font-size: 2.3vmin;
+  font-family: monospace;
+  background: #020038;
+  padding: 1rem;
+
+  min-width: 24rem;
+  max-width: 55rem;
+  max-height: 11rem;
+  min-height: 6rem;
+}
+
+.info-wrap + button {
+  height: 4.5vmin;
+  width: 11vmin;
+  padding: 0.5vmin;
+  border-radius: 4px;
+  font-family: 'Bebas Neue', cursive;
+  font-size: 2.5vmin;
+}
+
+
+.grid {
+  display: flex;
+  gap: 1%;
+  width: 50vmin;
+  height: 50vmin;
+  min-width: 25rem;
+  min-height: 25rem;
+  flex-wrap: wrap;
+  max-width: 60rem;
+  max-height: 60rem;
+  justify-content: center;
+}
+
+.sq {
+  width: 9%;
+  height: 9%;
+  border: solid 2px white;
+}
+
+@media (max-width: 434px) {
+  .info-wrap {
+    font-size: 1rem;
+  }
+} */
