@@ -1,7 +1,28 @@
 import Player from './player';
 import AIPlayer from './ai-player';
+import { getCeiling, isRedundant } from './helpers';
 
 /* eslint-disable */
+
+const testShip = {
+  name: 'carrier',
+  length: 5,
+  position: [],
+  damage: [],
+};
+
+function changeAxis() {
+  const axisBtn = document.querySelector('.info-wrap + button');
+  axisBtn.onclick = (e) => {
+    if (e.target.dataset.axis === 'x') {
+      e.target.dataset.axis = 'y';
+      e.target.textContent = 'AXIS: Y';
+    } else {
+      e.target.dataset.axis = 'x';
+      e.target.textContent = 'AXIS: X';
+    }
+  };
+}
 
 function typeWriter(text, i = 0) {
   if (i > text.length) return;
@@ -13,7 +34,7 @@ function typeWriter(text, i = 0) {
   }, 150);
 }
 
-export default async function initNewGame(name) {
+export default function initNewGame(name) {
   const player1 = new Player(name);
   const computer = new AIPlayer();
 
@@ -22,40 +43,67 @@ export default async function initNewGame(name) {
   computer.positionFleet();
 
   const { fleet } = player1.board;
+  const excludeCoords = [];
 
-  showEligible();
-
-  // const num = await getSqNmbr();
-  // console.log(num);
-
-  // console.log(player1);
-  // console.log(player1.board.fleet);
-  // console.log(computer);
-  // console.log(computer.board.fleet);
-  // let selectedSq;
-  // grid.addEventListener('click', (e) => {
-  //   selectedSq = e.target.closest('div');
-  //   console.log(selectedSq);
-  // });
-
-  // fleet.forEach((ship) => {
-  //   if (ship.position.length < 1) {
-  //     const shipName = ship.name;
-  //     const msg = `Admiral ${player1.name}, position your ${shipName} for battle.`;
-  //     typeWriter(msg);
-  //     console.log(selectedSq);
-  //   }
-  // });
+  changeAxis();
+  showEligibleAndPlace(testShip, []);
 }
 
-function placeShip(shipsArr) {}
-
-function showEligible() {
+function showEligibleAndPlace(ship, exclude) {
   const grid = document.querySelector('.grid');
+  let startCoord;
+  let max;
+  let position = [];
+
   grid.addEventListener('mouseover', (e) => {
+    const isXAxis =
+      document.querySelector('.info-wrap + button').dataset.axis === 'x'
+        ? true
+        : false;
     const sq = e.target.closest('.sq');
-    console.log(sq);
+    if (sq) {
+      startCoord = +sq.dataset.nmbr;
+      max = getCeiling(startCoord, isXAxis);
+      let subPos = [];
+
+      for (let i = 0; i < ship.length; i += 1) {
+        const coord = isXAxis ? startCoord + i : startCoord + i * 10;
+        subPos.push(coord);
+      }
+
+      position = [...subPos];
+
+      if (
+        !isRedundant(exclude, position) &&
+        position[position.length - 1] <= max
+      ) {
+        sq.onclick = (e) => {
+          console.log(e.target);
+          console.log(position);
+          return position;
+        };
+
+        position.forEach((coord) => {
+          let targSq = document.querySelector(`[data-nmbr="${coord}"]`);
+          targSq.classList.remove('lock');
+          targSq.classList.add('unlock');
+        });
+      }
+    }
   });
+
+  grid.addEventListener('mouseout', (e) => {
+    const squares = document.querySelectorAll('.sq');
+    squares.forEach((sq) => {
+      sq.onclick = null;
+      sq.classList.remove('unlock');
+      sq.classList.add('lock');
+    });
+  });
+}
+
+function placeShips(shipsArr) {
+  const takenPosits = [];
 }
 
 function getSqNmbr() {
