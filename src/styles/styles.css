@@ -218,3 +218,14 @@ form > button {
     font-size: 1rem;
   }
 } */
+
+.unlock {
+  cursor: pointer;
+  background-color: rgb(255 255 255 / 90%);
+  transition: all 0.3s ease 0s;
+}
+
+.unlock:hover {
+  /* cursor: pointer;
+  background-color: white; */
+}
