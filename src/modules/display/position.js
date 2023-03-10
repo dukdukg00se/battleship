@@ -9,9 +9,12 @@ function createInfoSection() {
   headingWrapper.classList.add('info-wrap');
   heading.textContent = 'Admiral A, position your carrier for battle.';
 
+  // Class to test typewriter effect
   heading.classList.add('typewriter');
 
   axisBtn.textContent = 'Axis: X';
+  axisBtn.type = 'button';
+  axisBtn.dataset.axis = 'x';
 
   headingWrapper.append(heading);
   infoContainer.append(headingWrapper, axisBtn);
@@ -25,6 +28,7 @@ function createGrid(maxSqs = 100) {
     const sq = document.createElement('div');
     sq.dataset.nmbr = i;
     sq.classList.add('sq');
+    sq.classList.add('lock');
     gridContainer.append(sq);
   }
   return gridContainer;
