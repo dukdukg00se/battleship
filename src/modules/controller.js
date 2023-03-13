@@ -4,13 +4,6 @@ import { getCeiling, isRedundant } from './helpers';
 
 /* eslint-disable */
 
-const testShip = {
-  name: 'carrier',
-  length: 5,
-  position: [],
-  damage: [],
-};
-
 function changeAxis() {
   const axisBtn = document.querySelector('.info-wrap + button');
   axisBtn.onclick = (e) => {
@@ -31,7 +24,7 @@ function typeWriter(text, i = 0) {
 
   setTimeout(() => {
     typeWriter(text, (i += 1));
-  }, 150);
+  }, 80);
 }
 
 function lockSqs() {
@@ -47,7 +40,7 @@ function isSqEligible(selectArr, excludeArr, max) {
   if (selectArr.some((element) => excludeArr.includes(element))) return false;
   if (selectArr[selectArr.length - 1] > max) return false;
   return true;
-} 
+}
 
 export default function initNewGame(name) {
   const player1 = new Player(name);
@@ -61,179 +54,94 @@ export default function initNewGame(name) {
   const excludeCoords = [];
 
   changeAxis();
-  placeShip(currentShipIndex, player1, excludeCoords)
-  
-
+  placeShip(currentShipIndex, player1, excludeCoords);
 }
 
 function placeShip(index, player, exclude) {
   const name = player.name;
-  const ships = player.board.fleet
+  const ships = player.board.fleet;
   const grid = document.querySelector('.grid');
   let shipLocation = [];
-  let ship = ships[index]
-  
+  let ship = ships[index];
 
-  console.log(ships)
+  console.log(ship);
 
   if (index >= ships.length) {
     // run the game
     grid.onmouseover = null;
-    console.log('start game')
+    console.log('start game');
     return;
-  } 
-  
-  else {
-    const msg = `Admiral ${name}, position your ${ship.name}.`
+  } else {
+    const msg = `Admiral ${name}, position your ${ship.name}.`;
     typeWriter(msg);
 
+    let startCoord;
+    let axis;
+    let max;
+    let sq;
+
     grid.onmouseover = (e) => {
-      const sq = e.target.closest('.sq');
+      sq = e.target.closest('.sq');
       if (sq) {
         const reqCoords = [];
-        const startCoord = +sq.dataset.nmbr;
-        const axis = document.querySelector('.info-wrap + button').dataset.axis;
-        const max = getCeiling(startCoord, axis === 'x');
+        startCoord = +sq.dataset.nmbr;
+        axis = document.querySelector('.info-wrap + button').dataset.axis;
+        max = getCeiling(startCoord, axis === 'x');
 
-
-    
         for (let i = 0; i < ship.length; i += 1) {
           const coord = axis === 'x' ? startCoord + i : startCoord + i * 10;
           reqCoords.push(coord);
         }
-    
-        shipLocation = [...reqCoords]
-    
-        if (
-          isSqEligible(shipLocation, exclude, max)
-        ) {
+
+        shipLocation = [...reqCoords];
+
+        if (isSqEligible(shipLocation, exclude, max)) {
           shipLocation.forEach((coord) => {
             let targSq = document.querySelector(`[data-nmbr="${coord}"]`);
             targSq.classList.remove('lock');
             targSq.classList.add('unlock');
           });
-  
-          sq.onclick = () => {
-            ship.position = shipLocation;
+
+          // sq.onclick = () => {
+          //   ship.position = shipLocation;
+          //   index += 1;
+          //   exclude.push(...ship.position)
+
+          //   shipLocation.forEach((coord) => {
+          //     let targSq = document.querySelector(`[data-nmbr="${coord}"]`);
+          //     targSq.classList.remove('unlock');
+          //     targSq.classList.add('lock');
+          //     targSq.classList.add('placed');
+          //   });
+
+          //   placeShip(index, player, exclude)
+          // }
+        }
+      }
+    };
+
+    setTimeout(() => {
+      grid.onclick = () => {
+        if (isSqEligible(shipLocation, exclude, max)) {
+          ship.position = shipLocation;
+          exclude.push(...ship.position);
+
+          shipLocation.forEach((coord) => {
+            let targSq = document.querySelector(`[data-nmbr="${coord}"]`);
+            targSq.classList.remove('unlock');
+            targSq.classList.add('lock');
+            targSq.classList.add('placed');
+          });
+
+          if (ship.position.length > 0) {
             index += 1;
-            exclude.push(...ship.position)
-
-            shipLocation.forEach((coord) => {
-              let targSq = document.querySelector(`[data-nmbr="${coord}"]`);
-              targSq.classList.remove('unlock');
-              targSq.classList.add('lock');
-              targSq.classList.add('placed');
-            });
-
-            placeShip(index, player, exclude)
+            placeShip(index, player, exclude);
           }
         }
-      }
-    }
+      };
+    }, 1600);
 
-    grid.addEventListener('mouseout', lockSqs);
+    grid.onmouseout = lockSqs;
+    // grid.addEventListener('mouseout', lockSqs);
   }
-  
 }
-
-// function placeShip(ship, exclude) {
-//   let shipLocation = [];
-
-//   const grid = document.querySelector('.grid');
-//   grid.addEventListener('mouseover', (e) => {
-//     const sq = e.target.closest('.sq');
-  
-//     if (sq) {
-//       const axis = document.querySelector('.info-wrap + button').dataset.axis;
-//       const startCoord = +sq.dataset.nmbr;
-//       const max = getCeiling(startCoord, axis === 'x');
-//       const reqCoords = [];
-  
-//       for (let i = 0; i < ship.length; i += 1) {
-//         const coord = axis === 'x' ? startCoord + i : startCoord + i * 10;
-//         reqCoords.push(coord);
-//       }
-  
-//       shipLocation = [...reqCoords]
-  
-//       if (
-//         isSqEligible(shipLocation, exclude, max)
-//       ) {
-
-//         sq.onclick = () => {
-//           ship.shipLocation = shipLocation;
-//           // return shipLocation;
-//         };
-
-//         shipLocation.forEach((coord) => {
-//           let targSq = document.querySelector(`[data-nmbr="${coord}"]`);
-//           targSq.classList.remove('lock');
-//           targSq.classList.add('unlock');
-//         });
-//       }
-//     }
-//   })
-
-//   grid.addEventListener('mouseout', lockSqs);
-// }
-
-function placeShip2(ship, exclude) {
-  let position = [];
-  let axis;
-  let max;
-
-  const grid = document.querySelector('.grid');
-  grid.onmouseover = (e) => {
-    const sq = e.target.closest('.sq');
-    if (sq) {
-      const reqCoords = [];
-      const startCoord = +sq.dataset.nmbr;
-      axis = document.querySelector('.info-wrap + button').dataset.axis;
-      
-      max = getCeiling(startCoord, axis === 'x');
-  
-      for (let i = 0; i < ship.length; i += 1) {
-        const coord = axis === 'x' ? startCoord + i : startCoord + i * 10;
-        reqCoords.push(coord);
-      }
-  
-      position = [...reqCoords]
-  
-      if (
-        isSqEligible(position, exclude, max)
-      ) {
-        position.forEach((coord) => {
-          let targSq = document.querySelector(`[data-nmbr="${coord}"]`);
-          targSq.classList.remove('lock');
-          targSq.classList.add('unlock');
-        });
-
-        sq.onclick = () => {
-          console.log('test')
-          ship.position = position;
-          console.log(ship)
-        }
-      }
-    }
-  }
-
-  grid.onmouseout = lockSqs;
-
-}
-
-function positionFleet(ships, name) {
-  let takenPosits = [];
-
-  ships.forEach(async ship => {
-    let shipName = ship.name;
-    let prompt = `Admiral ${name}, position your ${shipName} for battle.`
-    typeWriter(prompt);
-
-    placeShip2(ship, takenPosits);
-       
-    takenPosits.push(...ship.position);
-    
-  })
-
-}
-
