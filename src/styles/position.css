@@ -1,18 +1,21 @@
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .posit-container {
   display: flex;
   flex-direction: column;
   gap: 2rem;
   align-items: center;
+  animation: 2s ease-in 0s 1 normal none running fadein;
 }
 
-.posit-container > div:first-child {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.5rem;
-}
-
-.info-wrap {
+.prompt-wrapper {
   width: 55vmin;
   height: 9vmin;
   border: solid 0.1rem white;
@@ -28,7 +31,12 @@
   min-height: 6rem;
 }
 
-.info-wrap + button {
+.btns-container {
+  display: flex;
+  gap: 1rem;
+}
+
+button {
   height: 4.5vmin;
   width: 11vmin;
   padding: 0.5vmin;
@@ -69,24 +77,3 @@
     font-size: 1rem;
   }
 }
-
-/* .info-wrap h2 {
-  overflow: hidden; 
-  border-right: .15em solid orange; 
-  white-space: nowrap; 
-  margin: 0 auto;
-  letter-spacing: .15em; 
-  animation: 
-    typing 3.5s steps(30, end),
-    blink-caret .5s step-end infinite;
-}
-
-@keyframes typing {
-  from { width: 0 }
-  to { width: 100% }
-}
-
-@keyframes blink-caret {
-  from, to { border-color: transparent }
-  50% { border-color: orange }
-} */

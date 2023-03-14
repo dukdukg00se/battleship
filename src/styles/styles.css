@@ -225,7 +225,28 @@ form > button {
   transition: all 0.3s ease 0s;
 }
 
-.unlock:hover {
-  /* cursor: pointer;
-  background-color: white; */
+.placed {
+  background-color: #28a0ff;
+}
+
+.cleared {
+  animation: .5s ease-in 0s 1 normal forwards running clear;
+}
+
+@keyframes fadeout {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes clear {
+  from {
+    background-color: #28a0ff;
+  }
+  to {
+    background-color: #28a0ff00;
+  }
 }
