@@ -17,8 +17,14 @@ function isRedundant(parentArr, childArr) {
   return childArr.some((element) => parentArr.includes(element));
 }
 
+function isCoordsEligible(selectArr, excludeArr, max) {
+  if (selectArr.some((element) => excludeArr.includes(element))) return false;
+  if (selectArr[selectArr.length - 1] > max) return false;
+  return true;
+}
+
 function genNmbr(limit) {
   return Math.floor(Math.random() * limit) + 1;
 }
 
-export { getFloor, getCeiling, isRedundant, genNmbr };
+export { getFloor, getCeiling, isCoordsEligible, isRedundant, genNmbr };
