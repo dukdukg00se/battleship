@@ -18,6 +18,19 @@ function changeAxis() {
   };
 }
 
+function startBattle() {
+  
+
+
+
+  setTimeout(() => {
+    positGrid.remove();
+    const main = document.querySelector('main');
+    main.append(createBattlePage());
+    initNewGame(name);
+  }, 980)
+}
+
 function msgPlayer(text, i = 0) {
   if (i > text.length) return;
   const headMsg = document.querySelector('.prompt');
@@ -37,20 +50,6 @@ function lockSqs() {
   });
 }
 
-function startBattle() {
-  
-
-  let positGrid = document.querySelector('.grid');
-  positGrid.style.animation = '1s ease-in 0s 1 normal none running fadeout';
-
-  setTimeout(() => {
-    positGrid.remove();
-    const main = document.querySelector('main');
-    main.append(createBattlePage());
-    initNewGame(name);
-  }, 980)
-}
-
 function placeShips(index, player, exclude) {
   const { name } = player;
   const ships = player.board.fleet;
@@ -65,8 +64,6 @@ function placeShips(index, player, exclude) {
     msgPlayer(msg.toUpperCase());
     
     grid.onmouseover = null;
-    console.log('start game');
-
 
     return;
   } else {
@@ -103,26 +100,24 @@ function placeShips(index, player, exclude) {
       }
     };
 
-    setTimeout(() => {
-      grid.onclick = () => {
-        if (isCoordsEligible(shipLocation, exclude, max)) {
-          ship.position = shipLocation;
-          exclude.push(...ship.position);
+    grid.onclick = () => {
+      if (isCoordsEligible(shipLocation, exclude, max)) {
+        ship.position = shipLocation;
+        exclude.push(...ship.position);
 
-          shipLocation.forEach((coord) => {
-            const targSq = document.querySelector(`[data-nmbr="${coord}"]`);
-            targSq.classList.remove('unlock');
-            targSq.classList.add('lock');
-            targSq.classList.add('placed');
-          });
+        shipLocation.forEach((coord) => {
+          const targSq = document.querySelector(`[data-nmbr="${coord}"]`);
+          targSq.classList.remove('unlock');
+          targSq.classList.add('lock');
+          targSq.classList.add('placed');
+        });
 
-          if (ship.position.length > 0) {
-            index += 1;
-            placeShips(index, player, exclude);
-          }
+        if (ship.position.length > 0) {
+          index += 1;
+          placeShips(index, player, exclude);
         }
-      };
-    }, 1400);
+      }
+    };
 
     grid.onmouseout = lockSqs;
   }
@@ -182,8 +177,34 @@ export default function initNewGame(name) {
         placeShips(currentShipIndex, player1, excludeCoords);
       }
 
-      if (e.target.id === 'random') {
+      if (e.target.id === 'battle') {
         
+        if (player1.board.fleet[4].position.length > 0) {
+          const grid = document.querySelector('.grid');
+          const btnsContainer = document.querySelector('.btns-container');
+          const positContainer = document.querySelector('.posit-container');
+
+          // Blocks btn from being clicked more than once
+          // Prevents adding multiple grids
+          e.target.disabled = true;
+          // Removes default disabled btn styles
+          e.target.classList.add('undisable');
+   
+          grid.style.animation = '.5s ease-in 0s 1 normal forwards running fadeout';
+          btnsContainer.style.animation = '.5s ease-in 0s 1 normal forwards running fadeout';
+
+          setTimeout(() => {              
+            grid.remove();
+            btnsContainer.remove();
+            positContainer.append(createBattlePage(player1, computer));
+          }, 600);     
+          
+          return;
+        }
+
+        let msg = `Admiral ${name}, you must prepare your fleet for battle. Please position your ships`;
+        msgPlayer(msg.toUpperCase());        
+
       }
 
     })
