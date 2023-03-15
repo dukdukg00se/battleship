@@ -6,7 +6,6 @@ function createGrid(maxSqs = 100) {
     const sq = document.createElement('div');
     sq.dataset.nmbr = i;
     sq.classList.add('sq');
-    sq.classList.add('lock');
     gridContainer.append(sq);
   }
   return gridContainer;
