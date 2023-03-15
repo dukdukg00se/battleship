@@ -62,6 +62,9 @@ button {
 }
 
 .sq {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 9%;
   height: 9%;
   border: solid 2px white;
