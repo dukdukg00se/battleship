@@ -18,17 +18,10 @@ function changeAxis() {
   };
 }
 
-function startBattle() {
-  
-
-
-
-  setTimeout(() => {
-    positGrid.remove();
-    const main = document.querySelector('main');
-    main.append(createBattlePage());
-    initNewGame(name);
-  }, 980)
+function createCircle() {
+  const circle = document.createElement('div');
+  circle.classList.add('circle');
+  return circle;
 }
 
 function msgPlayer(text, i = 0) {
@@ -123,6 +116,55 @@ function placeShips(index, player, exclude) {
   }
 }
 
+function startBattle(player1, opponent) {
+  let winner;
+  let msg = `ENEMY DETECTED! AWAITING ORDERS ADMIRAL.`;
+  msgPlayer(msg)
+
+  const oppGrid = document.querySelector('.opponent');
+
+  if (!winner) {
+    oppGrid.onclick = (e) => {
+      msg = `YOU FIRE A SHOT INTO ENEMY WATERS...`
+      msgPlayer(msg)
+      const targSq = e.target.closest('.sq');
+      if (targSq) {
+        targSq.append(createCircle());
+        targSq.classList.add('locked');
+
+        let attackCoord = +targSq.dataset.nmbr;
+        player1.attack(opponent, attackCoord);
+
+        console.log(opponent.board.hit)
+
+        // if (opponent.board.hit) {
+        //   console.log('hit')
+
+        //   targSq.firstChild.classList.add('hit')
+
+        //   msg = `AND HIT AN ENEMY SHIP!`;
+        //   msgPlayer(msg);
+  
+          
+        // } else {
+        //   console.log('miss')
+
+        //   msg = `AND MISS!`;
+        //   msgPlayer(msg);
+
+        //   targSq.firstChild.classList.add('miss');
+        // }
+
+        // console.log(player1.attacks, opponent, opponent.board)
+      }
+    }
+  }
+
+
+
+
+}
+
 export default function initNewGame(name) {
   const player1 = new Player(name);
   const computer = new AIPlayer();
@@ -130,6 +172,8 @@ export default function initNewGame(name) {
   player1.assembleFleet();
   computer.assembleFleet();
   computer.positionFleet();
+
+  
 
   let currentShipIndex = 0;
   let excludeCoords = [];
@@ -197,12 +241,14 @@ export default function initNewGame(name) {
             grid.remove();
             btnsContainer.remove();
             positContainer.append(createBattlePage(player1, computer));
+            startBattle(player1, computer);
           }, 600);     
           
+          // startBattle(player1, computer);
           return;
         }
 
-        let msg = `Admiral ${name}, you must prepare your fleet for battle. Please position your ships`;
+        let msg = `Admiral ${name}, you must prepare your fleet for battle. Please position your ships.`;
         msgPlayer(msg.toUpperCase());        
 
       }
