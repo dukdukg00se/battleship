@@ -9,10 +9,11 @@ export default class Gameboard {
       ship.position.forEach((coord) => {
         if (coord === incoming) {
           ship.hit(incoming);
+          console.log('hit');
           if (ship.isSunk()) {
             this.shipsLost.push(ship);
             if (this.fleetLost()) {
-              // console.log('No ships left');
+              console.log('No ships left');
             }
           }
         }

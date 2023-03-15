@@ -32,18 +32,35 @@
 
 import './styles/reset.css';
 import './styles/styles.css';
-import form from './modules/display-form';
+import form from './modules/display/form';
+import createPositPage from './modules/display/position';
+import initNewGame from './modules/controller';
 
 const main = document.querySelector('main');
 main.append(form());
 
 const nameInput = document.getElementById('input-name');
 const submitBtn = document.querySelector('form > button');
+
 submitBtn.addEventListener('click', () => {
   const errMsg = document.querySelector('form > p');
   if (nameInput.validity.valueMissing) {
     errMsg.style.visibility = 'visible';
   } else {
     errMsg.style.visibility = 'hidden';
+
+    const name = nameInput.value;
+
+    document.querySelector('form').style.animation = '.9s ease-in 0s 1 normal forwards running fadeout';
+
+    setTimeout(() => {
+      document.querySelector('form').remove();
+      main.append(createPositPage());
+      initNewGame(name);
+    }, 950)
+
+    // document.querySelector('form').remove();
+    // main.append(createPositPage());
+    // initNewGame(name);
   }
 });

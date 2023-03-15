@@ -238,3 +238,8 @@ class AIPlayer extends Player {
     });
   }
 }
+
+const player1 = new AIPlayer();
+player1.assembleFleet();
+player1.positionFleet();
+console.log(player1.board.fleet);
