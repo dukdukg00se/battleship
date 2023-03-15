@@ -250,3 +250,28 @@ form > button {
     background-color: #28a0ff00;
   }
 }
+
+/* Battle styles */
+.grid-container {
+  display: flex;
+  gap: 5%;
+  margin-top: 5%;
+  animation: 2s ease-in 0s 1 normal none running fadein;
+}
+
+.target {
+  cursor: crosshair;
+}
+
+/* Removes default disabled btn styles */
+.undisable {
+  background-color: rgb(239, 239, 239);
+  color: black;
+  border-style: outset;
+  border-color: buttonborder;
+}
+
+h3 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
