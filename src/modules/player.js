@@ -6,20 +6,33 @@ export default class Player {
     this.name = name;
     this.board = new Gameboard();
     this.attacks = [];
+    this.opponent = null;
   }
 
-  attack(opp, coord) {
-    opp.board.receiveAttack(coord);
+  attack(coord, opp = this.opponent) {
     this.attacks.push(coord);
+    return opp.board.receiveAttack(coord);
   }
+
+  // hitEnemy(
+  //   attack = this.attacks[this.attacks.length - 1],
+  //   opp = this.opponent
+  // ) {
+  //   const oppShips = opp.board.fleet.reduce((coords, ship) => {
+  //     coords.push(...ship.position);
+  //     return coords;
+  //   }, []);
+
+  //   return oppShips.includes(attack);
+  // }
 
   assembleFleet(fleet = this.board.fleet) {
     const allShips = [
-      new Ship('carrier', 5),
-      new Ship('battleship', 4),
-      new Ship('patrol boat', 2),
-      new Ship('destroyer', 3),
-      new Ship('submarine', 3),
+      new Ship('CARRIER', 5),
+      new Ship('BATTLESHIP', 4),
+      new Ship('PATROL BOAR', 2),
+      new Ship('DESTROYER', 3),
+      new Ship('SUBMARINE', 3),
     ];
 
     allShips.forEach((ship) => fleet.push(ship));
