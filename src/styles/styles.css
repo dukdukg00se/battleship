@@ -254,6 +254,7 @@ form > button {
 /* Battle styles */
 .grid-container {
   display: flex;
+  justify-content: center;
   gap: 5%;
   margin-top: 5%;
   animation: 2s ease-in 0s 1 normal none running fadein;
@@ -261,6 +262,10 @@ form > button {
 
 .target {
   cursor: crosshair;
+}
+
+.target:hover {
+  background-color: green;
 }
 
 /* Removes default disabled btn styles */
@@ -275,3 +280,22 @@ h3 {
   text-align: center;
   margin-bottom: 1rem;
 }
+
+.circle {
+  height: 40%;
+  width: 40%;
+  border-radius: 50%;
+}
+
+.miss {
+  background-color: white;
+}
+
+.hit {
+  background-color: red;
+}
+
+
+/* body {
+  background: linear-gradient( 90deg, rgb(2, 0, 75) 0%,rgb(18, 18, 172) 35%, rgb(9 6 110) 50%, rgb(18, 18, 172) 70%, rgb(2, 0, 75) 100% );
+} */
