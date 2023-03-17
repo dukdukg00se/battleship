@@ -51,11 +51,10 @@ function placeShips(index, player, exclude) {
   const ship = ships[index];
   let msg;
 
-
   if (index >= ships.length) {
     msg = `Admiral ${name}, fleet ready. Press battle to continue.`;
     msgPlayer(msg.toUpperCase());
-    
+
     grid.onmouseover = null;
 
     return;
@@ -116,64 +115,329 @@ function placeShips(index, player, exclude) {
   }
 }
 
-function startBattle(player1, opponent) {
+// function startBattle(player1, opponent) {
+//   let winner;
+//   let msg = `ENEMY DETECTED, AWAITING ORDERS ADMIRAL...`;
+//   msgPlayer(msg);
+
+//   const oppGrid = document.querySelector('.opponent');
+
+//   if (!winner) {
+//     oppGrid.onclick = (e) => {
+//       console.log(currentTurn);
+//       // oppGrid.style.pointerEvents = 'none';
+
+//       const targSq = e.target.closest('.sq');
+//       if (targSq) {
+//         targSq.append(createCircle());
+
+//         // No styles here
+//         targSq.classList.add('locked');
+
+//         targSq.style.pointerEvents = 'none';
+
+//         let attackCoord = +targSq.dataset.nmbr;
+//         let playerResult = player1.attack(attackCoord);
+
+//         if (playerResult === 'hit') {
+//           targSq.firstChild.classList.add('hit');
+
+//           msg = `YOU FIRE A SHOT INTO ENEMY WATERS... AND HIT AN ENEMY SHIP!`;
+//           msgPlayer(msg);
+//         } 
+        
+//         else if (playerResult === 'miss') {
+//           msg = `YOU FIRE A SHOT INTO ENEMY WATERS... AND MISS!`;
+//           msgPlayer(msg);
+
+//           targSq.firstChild.classList.add('miss');
+//         } 
+        
+//         else if (playerResult === 'sunk') {
+//           targSq.firstChild.classList.add('hit');
+
+//           const oppLostShips = player1.opponent.board.shipsLost;
+//           const sunkShip = oppLostShips[oppLostShips.length - 1];
+
+//           msg = `YOU FIRE A SHOT INTO ENEMY WATERS... AND SINK THEIR ${sunkShip.name}!`;
+//           msgPlayer(msg);
+
+//           console.log(sunkShip)
+//         }
+
+//         else if (playerResult === 'lost') {
+//           targSq.firstChild.classList.add('hit');
+
+//           msg = `YOU SANK THE LAST ENEMY SHIP!!`;
+//           msgPlayer(msg);
+//           winner = player1.name;
+//           // Do something
+//         }
+
+//         setTimeout(() => {
+//           // currentTurn = 'player';
+//           // oppGrid.style.pointerEvents = 'auto';
+
+//           let oppResult = opponent.autoAttack();
+//           let attack = opponent.attacks[opponent.attacks.length - 1];
+
+//           const playerSq = document.querySelector(`.player > [data-nmbr="${attack}"]`);
+//           playerSq.append(createCircle())
+
+//           if (oppResult === 'hit') {
+//             playerSq.firstChild.classList.add('hit');
+
+//             let ship = playerSq.dataset.ship;
+  
+//             msg = `THE ENEMY FIRES A SHOT INTO YOUR WATERS... AND HIT YOUR ${ship}!`;
+//             msgPlayer(msg);
+//           } 
+          
+//           else if (oppResult === 'miss') {
+//             msg = 'THE ENEMY FIRES A SHOT INTO YOUR WATERS... AND MISSES!';
+//             msgPlayer(msg);
+  
+//             playerSq.firstChild.classList.add('miss');
+//           } 
+          
+//           else if (oppResult === 'sunk') {
+//             playerSq.firstChild.classList.add('hit');
+  
+//             const oppLostShips = opponent.opponent.board.shipsLost;
+//             // const sunkShip = oppLostShips[oppLostShips.length - 1];
+
+//             let ship = playerSq.dataset.ship;
+  
+//             msg = `THE ENEMY FIRES A SHOT INTO YOUR WATERS... AND SINKS YOUR ${ship}!`;
+//             msgPlayer(msg);
+  
+//             // console.log(sunkShip)
+//           }
+  
+//           else if (oppResult === 'lost') {
+//             playerSq.firstChild.classList.add('hit');
+
+//             msg = `THE ENEMY SANK YOUR LAST SHIP, YOU LOST!`;
+//             msgPlayer(msg);
+
+//             winner = opponent.name;
+//             console.log('Winner')
+
+//             // Do something
+//           }
+          
+//         }, 2500)
+        
+        
+//         // console.log(player1, opponent);
+//       }
+
+
+
+//     };
+//   }
+// }
+
+function startBattle(player1, opponent, turn = 'player') {
+  // console.log('start')
   let winner;
-  let msg = `ENEMY DETECTED! AWAITING ORDERS ADMIRAL.`;
-  msgPlayer(msg)
+
+
+  // Change below, msg is getting overwritten on play!!!!!
+  let msg = `ENEMY DETECTED, AWAITING ORDERS ADMIRAL...`;
+  msgPlayer(msg);
+  // Change above
 
   const oppGrid = document.querySelector('.opponent');
 
   if (!winner) {
-    oppGrid.onclick = (e) => {
-      msg = `YOU FIRE A SHOT INTO ENEMY WATERS...`
-      msgPlayer(msg)
-      const targSq = e.target.closest('.sq');
-      if (targSq) {
-        targSq.append(createCircle());
-        targSq.classList.add('locked');
+    if (turn === 'player') {
+      oppGrid.onclick = (e) => {
+        console.log('player')
 
-        let attackCoord = +targSq.dataset.nmbr;
-        player1.attack(opponent, attackCoord);
+       oppGrid.onclick = null;
 
-        console.log(opponent.board.hit)
-
-        // if (opponent.board.hit) {
-        //   console.log('hit')
-
-        //   targSq.firstChild.classList.add('hit')
-
-        //   msg = `AND HIT AN ENEMY SHIP!`;
-        //   msgPlayer(msg);
+        const targSq = e.target.closest('.sq');
+        if (targSq) {
+          targSq.append(createCircle());
   
+          // No styles here
+          targSq.classList.add('locked');
+  
+          let attackCoord = +targSq.dataset.nmbr;
+          let playerResult = player1.attack(attackCoord);
+  
+          if (playerResult === 'hit') {
+            targSq.firstChild.classList.add('hit');
+  
+            msg = `YOU FIRE A SHOT INTO ENEMY WATERS... AND HIT AN ENEMY SHIP!`;
+            msgPlayer(msg);
+          } 
           
-        // } else {
-        //   console.log('miss')
+          else if (playerResult === 'miss') {
+            msg = `YOU FIRE A SHOT INTO ENEMY WATERS... AND MISS!`;
+            msgPlayer(msg);
+  
+            targSq.firstChild.classList.add('miss');
+          } 
+          
+          else if (playerResult === 'sunk') {
+            targSq.firstChild.classList.add('hit');
+  
+            const oppLostShips = player1.opponent.board.shipsLost;
+            const sunkShip = oppLostShips[oppLostShips.length - 1];
+  
+            msg = `YOU FIRE A SHOT INTO ENEMY WATERS... AND SINK THEIR ${sunkShip.name}!`;
+            msgPlayer(msg);
+  
+            console.log(sunkShip)
+          }
+  
+          else if (playerResult === 'lost') {
+            targSq.firstChild.classList.add('hit');
+  
+            msg = `YOU SANK THE LAST ENEMY SHIP!!`;
+            msgPlayer(msg);
+            winner = player1.name;
+            // Do something
+          }
+  
+          startBattle(player1, opponent, 'computer')
+          
+        }
+      };
+    } 
+    
+    else if (turn === 'computer') {
+      // console.log('comp')
 
-        //   msg = `AND MISS!`;
-        //   msgPlayer(msg);
+      msg = `THE ENEMY IS PREPARING TO RETURN FIRE.`;
 
-        //   targSq.firstChild.classList.add('miss');
-        // }
+      setTimeout(msgPlayer(msg), 5000);
 
-        // console.log(player1.attacks, opponent, opponent.board)
-      }
+      setTimeout(() => {
+        let oppResult = opponent.autoAttack();
+        let attack = opponent.attacks[opponent.attacks.length - 1];
+
+        // This works
+        oppGrid.onclick = (e) => {
+
+          oppGrid.onclick = null;
+   
+           const targSq = e.target.closest('.sq');
+           if (targSq) {
+             targSq.append(createCircle());
+     
+             // No styles here
+             targSq.classList.add('locked');
+     
+             let attackCoord = +targSq.dataset.nmbr;
+             let playerResult = player1.attack(attackCoord);
+     
+             if (playerResult === 'hit') {
+               targSq.firstChild.classList.add('hit');
+     
+               msg = `YOU FIRE A SHOT INTO ENEMY WATERS... AND HIT AN ENEMY SHIP!`;
+               msgPlayer(msg);
+             } 
+             
+             else if (playerResult === 'miss') {
+               msg = `YOU FIRE A SHOT INTO ENEMY WATERS... AND MISS!`;
+               msgPlayer(msg);
+     
+               targSq.firstChild.classList.add('miss');
+             } 
+             
+             else if (playerResult === 'sunk') {
+               targSq.firstChild.classList.add('hit');
+     
+               const oppLostShips = player1.opponent.board.shipsLost;
+               const sunkShip = oppLostShips[oppLostShips.length - 1];
+     
+               msg = `YOU FIRE A SHOT INTO ENEMY WATERS... AND SINK THEIR ${sunkShip.name}!`;
+               msgPlayer(msg);
+     
+               console.log(sunkShip)
+             }
+     
+             else if (playerResult === 'lost') {
+               targSq.firstChild.classList.add('hit');
+     
+               msg = `YOU SANK THE LAST ENEMY SHIP!!`;
+               msgPlayer(msg);
+               winner = player1.name;
+               // Do something
+             }
+     
+             startBattle(player1, opponent, 'computer')
+             
+           }
+        };
+
+        const playerSq = document.querySelector(`.player > [data-nmbr="${attack}"]`);
+        playerSq.append(createCircle())
+
+        if (oppResult === 'hit') {
+          playerSq.firstChild.classList.add('hit');
+
+          let ship = playerSq.dataset.ship;
+
+          msg = `THE ENEMY FIRES A SHOT INTO YOUR WATERS... AND HIT YOUR ${ship}!`;
+          msgPlayer(msg);
+        } 
+        
+        else if (oppResult === 'miss') {
+          msg = 'THE ENEMY FIRES A SHOT INTO YOUR WATERS... AND MISSES!';
+          msgPlayer(msg);
+
+          playerSq.firstChild.classList.add('miss');
+        } 
+        
+        else if (oppResult === 'sunk') {
+          playerSq.firstChild.classList.add('hit');
+
+          const oppLostShips = opponent.opponent.board.shipsLost;
+          // const sunkShip = oppLostShips[oppLostShips.length - 1];
+
+          let ship = playerSq.dataset.ship;
+
+          msg = `THE ENEMY FIRES A SHOT INTO YOUR WATERS... AND SINKS YOUR ${ship}!`;
+          msgPlayer(msg);
+
+          // console.log(sunkShip)
+        }
+
+        else if (oppResult === 'lost') {
+          playerSq.firstChild.classList.add('hit');
+
+          msg = `THE ENEMY SANK YOUR LAST SHIP, YOU LOST!`;
+          msgPlayer(msg);
+
+          winner = opponent.name;
+          console.log('Winner')
+
+          // Do something
+        }
+
+        // Not needed
+        // startBattle(player1, opponent, 'player')
+      
+      }, 10000)
+          
     }
+
   }
-
-
-
-
 }
 
 export default function initNewGame(name) {
   const player1 = new Player(name);
   const computer = new AIPlayer();
+  player1.opponent = computer;
+  computer.opponent = player1;
 
   player1.assembleFleet();
   computer.assembleFleet();
   computer.positionFleet();
-
-  
 
   let currentShipIndex = 0;
   let excludeCoords = [];
@@ -181,9 +445,8 @@ export default function initNewGame(name) {
   placeShips(currentShipIndex, player1, excludeCoords);
 
   const btns = document.querySelectorAll('button');
-  btns.forEach(btn => {
+  btns.forEach((btn) => {
     btn.addEventListener('click', (e) => {
-
       if (e.target.id === 'axis') {
         if (e.target.dataset.axis === 'x') {
           e.target.dataset.axis = 'y';
@@ -200,7 +463,6 @@ export default function initNewGame(name) {
 
         const sqs = document.querySelectorAll('.sq');
         sqs.forEach((sq) => {
-
           if (sq.classList.contains('placed')) {
             sq.classList.add('cleared');
           }
@@ -210,19 +472,14 @@ export default function initNewGame(name) {
             sq.classList.remove('cleared');
             sq.classList.remove('unlock');
             sq.classList.add('lock');
-          }, 500)
+          }, 500);
 
-          // sq.classList.remove('placed');
-          // sq.classList.remove('unlock');
-          // sq.classList.add('lock');
-        
         });
 
         placeShips(currentShipIndex, player1, excludeCoords);
       }
 
       if (e.target.id === 'battle') {
-        
         if (player1.board.fleet[4].position.length > 0) {
           const grid = document.querySelector('.grid');
           const btnsContainer = document.querySelector('.btns-container');
@@ -233,26 +490,25 @@ export default function initNewGame(name) {
           e.target.disabled = true;
           // Removes default disabled btn styles
           e.target.classList.add('undisable');
-   
-          grid.style.animation = '.5s ease-in 0s 1 normal forwards running fadeout';
-          btnsContainer.style.animation = '.5s ease-in 0s 1 normal forwards running fadeout';
 
-          setTimeout(() => {              
+          grid.style.animation =
+            '.5s ease-in 0s 1 normal forwards running fadeout';
+          btnsContainer.style.animation =
+            '.5s ease-in 0s 1 normal forwards running fadeout';
+
+          setTimeout(() => {
             grid.remove();
             btnsContainer.remove();
             positContainer.append(createBattlePage(player1, computer));
             startBattle(player1, computer);
-          }, 600);     
-          
-          // startBattle(player1, computer);
+          }, 600);
+
           return;
         }
 
         let msg = `Admiral ${name}, you must prepare your fleet for battle. Please position your ships.`;
-        msgPlayer(msg.toUpperCase());        
-
+        msgPlayer(msg.toUpperCase());
       }
-
-    })
-  })
+    });
+  });
 }
