@@ -5,20 +5,23 @@ export default class Gameboard {
   }
 
   receiveAttack(incoming) {
+    let result = 'miss';
     this.fleet.forEach((ship) => {
       ship.position.forEach((coord) => {
         if (coord === incoming) {
           ship.hit(incoming);
-          console.log('hit');
+          result = 'hit';
           if (ship.isSunk()) {
             this.shipsLost.push(ship);
+            result = 'sunk';
             if (this.fleetLost()) {
-              console.log('No ships left');
+              result = 'lost';
             }
           }
         }
       });
     });
+    return result;
   }
 
   fleetLost() {
