@@ -30,7 +30,7 @@ export default class Player {
     const allShips = [
       new Ship('CARRIER', 5),
       new Ship('BATTLESHIP', 4),
-      new Ship('PATROL BOAR', 2),
+      new Ship('PATROL BOAT', 2),
       new Ship('DESTROYER', 3),
       new Ship('SUBMARINE', 3),
     ];
