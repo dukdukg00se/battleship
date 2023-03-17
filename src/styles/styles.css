@@ -289,10 +289,12 @@ h3 {
 
 .miss {
   background-color: white;
+  animation: .5s ease-in 0s 1 normal none running fadein;
 }
 
 .hit {
   background-color: red;
+  animation: .5s ease-in 0s 1 normal none running fadein;
 }
 
 
