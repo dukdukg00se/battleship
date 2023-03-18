@@ -43,14 +43,22 @@ export default function createBattlePage(player) {
   oppGrid.classList.add('opponent');
 
   // Move this to the DOM module
-  const playerShips = player.board.fleet.reduce((coords, ship) => {
-    coords.push(...ship.position);
-    return coords;
-  }, []);
-  playerShips.forEach(coord => {
-    const targSq = playerGrid.querySelector(`[data-nmbr="${coord}"]`);
-    targSq.classList.add('placed');
+  player.board.fleet.forEach(ship => {
+    ship.position.forEach(coord => {
+      const targSq = playerGrid.querySelector(`[data-nmbr="${coord}"]`);
+      targSq.classList.add('placed');
+      targSq.dataset.ship = ship.name;
+    })
   })
+
+  // const playerShips = player.board.fleet.reduce((coords, ship) => {
+  //   coords.push(...ship.position);
+  //   return coords;
+  // }, []);
+  // playerShips.forEach(coord => {
+  //   const targSq = playerGrid.querySelector(`[data-nmbr="${coord}"]`);
+  //   targSq.classList.add('placed');
+  // })
 
   playerWrapper.append(playerHeader, playerGrid);
   oppWrapper.append(oppHeader, oppGrid);
