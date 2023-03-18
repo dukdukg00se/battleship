@@ -297,6 +297,14 @@ h3 {
   animation: .5s ease-in 0s 1 normal none running fadein;
 }
 
+.locked {
+  cursor: not-allowed;
+}
+
+.locked:hover {
+  background-color: rgba(255, 60, 60, 0.6);
+}
+
 
 /* body {
   background: linear-gradient( 90deg, rgb(2, 0, 75) 0%,rgb(18, 18, 172) 35%, rgb(9 6 110) 50%, rgb(18, 18, 172) 70%, rgb(2, 0, 75) 100% );
