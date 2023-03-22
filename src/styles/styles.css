@@ -83,8 +83,8 @@ main {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 3rem;
-  padding: 8vmin 5rem 5rem;
+  gap: 3vmin;
+  padding: 5vmin;
 }
 
 /* @media (max-width: 500px), (max-height: 500px) {
@@ -235,7 +235,7 @@ form > button {
   }
 } */
 
-.unlock {
+/* .unlock {
   cursor: pointer;
   background-color: rgb(255 255 255 / 90%);
   transition: all 0.3s ease 0s;
@@ -243,7 +243,33 @@ form > button {
 
 .placed {
   background-color: #28a0ff;
+} */
+
+
+
+
+
+.unlock {
+  cursor: pointer;
 }
+
+.ship-shadow {
+  background-color: rgb(255 255 255 / 90%);
+  transition: all 0.3s ease 0s;
+}
+
+.ship-position {
+  background-color: #28a0ff;
+  animation: 0.5s ease-in 0s 1 normal none running appear;
+}
+
+.lock:hover {
+  background-color: rgba(255, 60, 60, 0.6);
+  cursor: not-allowed;
+}
+
+
+
 
 @keyframes clear {
   from {
@@ -267,9 +293,9 @@ form > button {
   animation: 0.3s ease-in 0s 1 normal forwards running clear;
 } */
 
-.appear {
+/* .appear {
   animation: 0.3s ease-in 0s 1 normal none running appear;
-}
+} */
 
 /* Battle styles */
 .grid-container {
@@ -282,7 +308,7 @@ form > button {
 
 .target {
   cursor: crosshair;
-  animation: name duration timing-function delay iteration-count direction fill-mode;
+  /* animation: name duration timing-function delay iteration-count direction fill-mode; */
 }
 
 .target:hover {
@@ -318,10 +344,47 @@ h3 {
   animation: 0.5s ease-in 0s 1 normal none running fadein;
 }
 
-.locked {
+/* .locked {
   cursor: not-allowed;
 }
 
 .locked:hover {
   background-color: rgba(255, 60, 60, 0.6);
+} */
+
+.battle-grid {
+  display: flex;
+  gap: 1%;
+  width: 45vmin;
+  height: 45vmin;
+  min-width: 25rem;
+  min-height: 25rem;
+  flex-wrap: wrap;
+  justify-content: center;
 }
+
+.ship-start-x {
+  border-bottom-left-radius: 50%;
+  border-top-left-radius: 50%;
+}
+
+.ship-end-x {
+  border-bottom-right-radius: 50%;
+  border-top-right-radius: 50%;
+}
+
+.ship-start-y {
+  border-top-left-radius: 50%;
+  border-top-right-radius: 50%
+}
+
+.ship-end-y {
+  border-bottom-left-radius: 50%;
+  border-bottom-right-radius: 50%
+}
+
+/* border-bottom-left-radius: 50%;
+border-bottom-right-radius: 50%
+
+border-bottom-right-radius: 50%;
+border-top-right-radius: 50%; */
