@@ -186,73 +186,27 @@ function startGame(name) {
   player1.opponent = player2;
   player1.assembleFleet();
 
-  // let excludeCoords = [];
   placePlayerShips(player1);
 
   const btns = document.querySelectorAll('button');
   btns.forEach((btn) => {
     btn.addEventListener('click', (e) => {
       selectAction(player1, player2, e);
-
-      // if (e.target.id === 'axis') {
-      //   changeAxis(e);
-      // } else if (e.target.id === 'clear') {
-      //   excludeCoords = [];
-      //   removeShipHl();
-      //   placePlayerShips(player1, excludeCoords);
-      // } else if (e.target.id === 'battle') {
-
-      //   if (player1.board.fleet[4].position.length > 0) {
-
-      //     const positContainer = document.querySelector('.posit-container');
-      //     positContainer.style.animation = '.5s ease-in 0s 1 normal forwards running fadeout';
-
-      //     e.target.disabled = true;
-      //     e.target.classList.add('undisable');
-
-      //     setTimeout(() => {
-      //       positContainer.parentNode.append(createBattlePage(player1, player2))
-      //       positContainer.remove();
-      //       startBattle(player1, player2);
-      //       // msg = `ENEMY DETECTED, AWAITING ORDERS ADMIRAL...`;
-      //       // msgPlayer(msg);
-      //     }, 500);
-
-      //     return;
-      //   }
-
-      //   let msg = `Admiral ${name}, you must prepare your fleet for battle. Please position your ships.`;
-      //   msgPlayer(msg.toUpperCase());
-      // } else {
-      //   excludeCoords = [];
-      //   removeShipHl();
-
-      //   player1.autoPositionFleet();
-      //   const playerShips = player1.board.fleet;
-      //   playerShips.forEach((ship) => {
-      //     showShipPosition(ship.position);
-      //   });
-
-      //   // Shows msg to press battle, add index
-      //   placePlayerShips(player1, excludeCoords, playerShips.length);
-      // }
     });
   });
 }
 
-function selectAction(player, opponent, event, exclude = []) {
+function selectAction(player, opponent, event) {
   const playerShips = player.board.fleet;
-  console.log(playerShips)
   
   if (event.target.id === 'axis') {
     changeAxis(event);
   } else if (event.target.id === 'clear') {
+    player.resetFleet();
     removeShipHl();
     placePlayerShips(player);
   } else if (event.target.id === 'battle') {
-    
     if (playerShips[playerShips.length - 1].position.length > 0) {
-
       const positContainer = document.querySelector('.posit-container');
       positContainer.style.animation = '.5s ease-in 0s 1 normal forwards running fadeout';
 
@@ -272,11 +226,10 @@ function selectAction(player, opponent, event, exclude = []) {
 
     let msg = `Admiral ${player.name}, you must prepare your fleet for battle. Please position your ships.`;
     msgPlayer(msg.toUpperCase());
-  } else {
+  } else { // random btn
     
     removeShipHl();
     player.autoPositionFleet();
-
     playerShips.forEach((ship) => {
       showShipPosition(ship.position);
     });
