@@ -11,7 +11,6 @@ function changeAxis(e) {
 function indicateInactive() {
   const sqs = document.querySelectorAll('.sq');
   sqs.forEach((sq) => {
-    sq.onclick = null;
     sq.classList.remove('unlock');
     sq.classList.add('lock');
   });
@@ -20,13 +19,12 @@ function indicateInactive() {
 function removeShipHl() {
   const sqs = document.querySelectorAll('.sq');
   sqs.forEach((sq) => {
-    sq.classList.remove('placed', 'clear', 'unlock');
-    sq.classList.add('lock');
+    sq.className = '';
+    sq.classList.add('sq', 'lock');
   });
 }
 
 function addShipHl(coords) {
-  // console.log(e.type === 'mouseover');
   coords.forEach((coord) => {
     const sq = document.querySelector(`[data-nmbr="${coord}"]`);
     sq.classList.remove('lock');
@@ -34,11 +32,30 @@ function addShipHl(coords) {
   });
 }
 
-function showPlacement(coords) {
+function showShipPosition(coords) {
+  const dir = coords[0] + 1 === coords[1] ? 'x' : 'y';
+  
+  let i = 1;
   coords.forEach((coord) => {
     const sq = document.querySelector(`[data-nmbr="${coord}"]`);
     sq.classList.remove('unlock');
     sq.classList.add('lock', 'placed', 'appear');
+
+    if (i === 1) {
+      if (dir === 'x') {
+        sq.classList.add('ship-start-x');
+      } else {
+        sq.classList.add('ship-start-y');
+      }
+    } else if (i === coords.length) {
+      if (dir === 'x') {
+        sq.classList.add('ship-end-x');
+      } else {
+        sq.classList.add('ship-end-y');
+      }
+    }
+
+    i += 1;
   });
 }
 
@@ -52,6 +69,6 @@ export {
   changeAxis,
   removeShipHl,
   addShipHl,
-  showPlacement,
+  showShipPosition,
   returnSqNmbr,
 };
