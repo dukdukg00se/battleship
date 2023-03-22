@@ -8,7 +8,7 @@ function changeAxis(e) {
   }
 }
 
-function indicateInactive() {
+function lockSq() {
   const sqs = document.querySelectorAll('.sq');
   sqs.forEach((sq) => {
     sq.classList.remove('unlock');
@@ -65,7 +65,7 @@ function returnSqNmbr(e) {
 }
 
 export {
-  indicateInactive,
+  lockSq,
   changeAxis,
   removeShipHl,
   addShipHl,
