@@ -1,5 +1,4 @@
 import '../../styles/position.css';
-// import { addClassToSqs, createGrid } from './aux-dom-fns';
 
 function createGrid(maxSqs = 100) {
   const gridContainer = document.createElement('div');
