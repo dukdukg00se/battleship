@@ -2,15 +2,17 @@ import Player from './data/player';
 import AIPlayer from './data/ai-player';
 import { getCeiling, isCoordsEligible, getPositionCoords } from './data/aux-helper-fns';
 import {
-  lockSq,
+  removeShadows,
   changeAxis,
-  removeShipHl,
-  addShipHl,
+  removeShipPositions,
+  showShipShadow,
   showShipPosition,
+  showFleetPosition,
+  unlockSq,
   returnSqNmbr,
 } from './dom/aux-dom-fns';
 import { createBattlePage, markShot } from './dom/battle-section';
-import positUI from './dom/positioning-section';
+import { createPositUI } from './dom/positioning-section';
 import playerPrompt from './dom/player-prompt';
 
 /* eslint-disable */
@@ -27,7 +29,7 @@ function msgPlayer(text, i = 0) {
 
 function startBattle(player1, opponent, turn = 'player') {
   let msg;
-  const oppGrid = document.querySelector('.opponent');
+  const oppGrid = document.querySelector(`.${opponent.name}`);
 
   if (turn === 'player') {
     oppGrid.onclick = (e) => {
@@ -180,11 +182,11 @@ function startGame(name) {
   const player1 = new Player(name);
   const player2 = new AIPlayer();
 
+  player1.opponent = player2;
   player2.opponent = player1;
+  player1.assembleFleet();
   player2.assembleFleet();
   player2.autoPositionFleet();
-  player1.opponent = player2;
-  player1.assembleFleet();
 
   placePlayerShips(player1);
 
@@ -203,7 +205,7 @@ function selectAction(player, opponent, event) {
     changeAxis(event);
   } else if (event.target.id === 'clear') {
     player.resetFleet();
-    removeShipHl();
+    removeShipPositions();
     placePlayerShips(player);
   } else if (event.target.id === 'battle') {
     if (playerShips[playerShips.length - 1].position.length > 0) {
@@ -216,6 +218,8 @@ function selectAction(player, opponent, event) {
       setTimeout(() => {
         positContainer.parentNode.append(createBattlePage(player, opponent))
         positContainer.remove();
+
+        showFleetPosition(player);
         startBattle(player, opponent);
         // msg = `ENEMY DETECTED, AWAITING ORDERS ADMIRAL...`;
         // msgPlayer(msg);
@@ -228,7 +232,7 @@ function selectAction(player, opponent, event) {
     msgPlayer(msg.toUpperCase());
   } else { // random btn
     
-    removeShipHl();
+    removeShipPositions();
     player.autoPositionFleet();
     playerShips.forEach((ship) => {
       showShipPosition(ship.position);
@@ -264,7 +268,8 @@ function placePlayerShips(player, index = 0, exclude = []) {
         shipPosition = [...getPositionCoords(currentShip, startCoord, axis)];
 
         if (isCoordsEligible(exclude, shipPosition, max)) {
-          addShipHl(shipPosition);
+          unlockSq(sq);
+          showShipShadow(shipPosition);
         }
       }
     };
@@ -282,7 +287,7 @@ function placePlayerShips(player, index = 0, exclude = []) {
       }
     };
 
-    grid.onmouseout = lockSq;
+    grid.onmouseout = removeShadows;
   }
 
   msgPlayer(msg.toUpperCase());
@@ -315,7 +320,7 @@ function processForm(e) {
 
   setTimeout(() => {
     form.remove();
-    main.append(playerPrompt(), positUI());
+    main.append(playerPrompt(), createPositUI());
     startGame(nameInput.value);
   }, 900);
 }
@@ -468,7 +473,7 @@ function processForm(e) {
 //   };
 // }
 
-// function addShipHl(coords) {
+// function showShipShadow(coords) {
 //   coords.forEach((coord) => {
 //     const sq = document.querySelector(`[data-nmbr="${coord}"]`);
 //     sq.classList.remove('lock');
