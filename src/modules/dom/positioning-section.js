@@ -1,4 +1,26 @@
 import '../../styles/position.css';
+// import { addClassToSqs, createGrid } from './aux-dom-fns';
+
+function createGrid(maxSqs = 100) {
+  const gridContainer = document.createElement('div');
+  for (let i = 1; i <= maxSqs; i += 1) {
+    const sq = document.createElement('div');
+    sq.dataset.nmbr = i;
+    sq.classList.add('sq');
+    gridContainer.append(sq);
+  }
+  return gridContainer;
+}
+
+function addClassToSqs(grid, ...classNames) {
+  const classesToAdd = [...classNames];
+  const sqs = grid.querySelectorAll('.sq');
+  sqs.forEach(sq => {
+    classesToAdd.forEach(newClass => {
+      sq.classList.add(newClass);
+    })
+  })
+}
 
 function createBtns() {
   const btnsContainer = document.createElement('div');
@@ -31,22 +53,15 @@ function createBtns() {
   return btnsContainer;
 }
 
-function createGrid(maxSqs = 100) {
-  const gridContainer = document.createElement('div');
-  gridContainer.classList.add('grid');
-  for (let i = 1; i <= maxSqs; i += 1) {
-    const sq = document.createElement('div');
-    sq.dataset.nmbr = i;
-    sq.classList.add('sq');
-    sq.classList.add('lock');
-    gridContainer.append(sq);
-  }
-  return gridContainer;
-}
-
-export default function createPositUI() {
+function createPositUI() {
   const uIContainer = document.createElement('div');
+  const grid = createGrid();
+  grid.classList.add('grid');
+  addClassToSqs(grid, 'lock');
+
   uIContainer.classList.add('posit-container', 'appear');
-  uIContainer.append(createBtns(), createGrid());
+  uIContainer.append(createBtns(), grid);
   return uIContainer;
 }
+
+export { createGrid, addClassToSqs, createPositUI };
