@@ -8,7 +8,7 @@ function markShot() {
   return circle;
 }
 
-function createBattlePage(player, opponent) {
+function createBattleGrids(player, opponent) {
   const gridsContainer = document.createElement('div');
   const playerWrapper = document.createElement('div');
   const oppWrapper = document.createElement('div');
@@ -33,4 +33,4 @@ function createBattlePage(player, opponent) {
   return gridsContainer;
 }
 
-export { markShot, createBattlePage }
+export { markShot, createBattleGrids }
