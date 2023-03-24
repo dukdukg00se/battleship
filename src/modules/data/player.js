@@ -22,19 +22,23 @@ export default class Player {
   }
 
   report(attack = this.attacks[this.attacks.length - 1], opp = this.opponent) {
-    const oppFleetCoords = opp.board.fleet.reduce((coords, ship) => {
+    const { board } = opp;
+    const oppFleetCoords = board.fleet.reduce((coords, ship) => {
       coords.push(...ship.position);
       return coords;
     }, []);
-    const oppLostShipsCoords = opp.board.shipsLost.reduce((coords, ship) => {
+    const oppLostShipsCoords = board.shipsLost.reduce((coords, ship) => {
       coords.push(...ship.position);
       return coords;
     }, []);
+    let attackResult;
 
-    if (opp.board.fleetLost()) return 'all sunk';
-    if (oppLostShipsCoords.includes(attack)) return 'sunk';
-    if (oppFleetCoords.includes(attack)) return 'hit';
-    return 'miss';
+    if (board.fleetLost()) attackResult = 'allSunk';
+    else if (oppLostShipsCoords.includes(attack)) attackResult = board.shipsLost[board.shipsLost.length - 1].name;
+    else if (oppFleetCoords.includes(attack)) attackResult = 'hit';
+    else attackResult = 'miss';
+
+    return attackResult;
   }
 
   assembleFleet(fleet = this.board.fleet) {
