@@ -21,7 +21,7 @@ export default class Player {
     opp.board.receiveAttack(coord);
   }
 
-  report(attack = this.attacks[this.attacks.length - 1], opp = this.opponent) {
+  reportAttackResult(attack = this.attacks[this.attacks.length - 1], opp = this.opponent) {
     const { board } = opp;
     const oppFleetCoords = board.fleet.reduce((coords, ship) => {
       coords.push(...ship.position);
@@ -39,6 +39,10 @@ export default class Player {
     else attackResult = 'miss';
 
     return attackResult;
+  }
+
+  reportAttackCoord(attacks = this.attacks) {
+    return attacks[attacks.length - 1];
   }
 
   assembleFleet(fleet = this.board.fleet) {
