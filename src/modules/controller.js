@@ -26,6 +26,7 @@ function msgPlayer(text, i = 0) {
   }, 25);
 }
 
+// startAttackBy()
 function playerAttack(plyr, sq) {
   const attackCoord = +sq.dataset.nmbr;
   let msg;
@@ -35,59 +36,101 @@ function playerAttack(plyr, sq) {
   }
 
   sq.append(markShot());
-  sq.classList.add('lock');
-  sq.classList.remove('target');
+  sq.classList.toggle('lock', 'target');
 
   plyr.attack(attackCoord);
-  const result = plyr.report();
+  const result = plyr.reportAttackResult();
 
-  if (result === 'hit') {
-    msg = `YOU FIRE A SHOT INTO ENEMY WATERS... AND HIT AN ENEMY SHIP!`;
-
-    sq.firstChild.classList.add('hit');
-
-  } else if (result === 'miss') {
+  if (result === 'miss') {
+    sq.firstChild.classList.add('miss');
     msg = `YOU FIRE A SHOT INTO ENEMY WATERS... AND MISS!`;
 
-    sq.firstChild.classList.add('miss');
-
-  } else if (result === 'allSunk') {
-    sq.firstChild.classList.add('hit');
-
-    msg = `YOU SANK THE LAST ENEMY SHIP!!`;
-
-    // winner = player1.name;
-    // Do something
   } else {
     sq.firstChild.classList.add('hit');
 
-    msg = `YOU FIRE A SHOT INTO ENEMY WATERS... AND SINK THEIR ${result}!`;
+    if (result === 'hit') {
+      msg = `YOU FIRE A SHOT INTO ENEMY WATERS... AND HIT AN ENEMY SHIP!`;
+    } else if (result === 'allSunk') {
+      msg = `CONGRATULATIONS, YOU SANK THE LAST ENEMY SHIP!`;
+    } else {
+      msg = `YOU FIRE A SHOT INTO ENEMY WATERS... AND SINK THEIR ${result}!`;
+    }
   }
 
   msgPlayer(msg);  
 }
 
-function startBattle(player1, opponent, turnCount = 0) {
+function computerAttack(plyr, grid) {
+  let msg = `THE ENEMY IS RETURNING FIRE...`;
 
-  console.log(opponent.board.fleet)
+  setTimeout(() => {
+    plyr.autoAttack();
+    const result = plyr.reportAttackResult();
+    const attack = plyr.reportAttackCoord();
+    const sq = grid.querySelector(`[data-nmbr="${attack}"]`);
+    sq.append(markShot());
+
+    if (result === 'miss') {
+      sq.firstChild.classList.add('miss');
+      msg = 'THE ENEMY FIRES A SHOT INTO YOUR WATERS... AND MISSES!';
+
+    } else {
+      sq.firstChild.classList.add('hit');
+
+      if (result === 'hit') {
+        msg = `THE ENEMY FIRES A SHOT INTO YOUR WATERS... AND HITS YOUR ${result}!`;
+
+      } else if (result === 'allSunk') {
+        msg = `THE ENEMY SANK YOUR LAST SHIP, YOU LOST!`;
+
+      } else {
+        msg = `THE ENEMY FIRES A SHOT INTO YOUR WATERS... AND SINKS YOUR ${result}!`;
+      }
+
+    }
+
+    msgPlayer(msg); 
+  }, 2000)
+
+
+  msgPlayer(msg);  
+}
+
+function startBattle(plyr1, plyr2, turnCount = 0) {
+
+  console.log(turnCount)
 
   let msg;
-  const oppGrid = document.querySelector(`.${opponent.name}`);
+  let player;
+  let enemyWaters;
+
 
   if (turnCount === 0) {
     msg = `ENEMY DETECTED, AWAITING ORDERS ADMIRAL...`;
     msgPlayer(msg);
   }
 
-  if (turnCount % 2 === 0) { // player1 turn
+  if (turnCount % 2 === 0) {
+    player = 'plyr1';
+    enemyWaters = document.querySelector('.plyr2');
+  } else {
+    player = 'plyr2';
+    enemyWaters = document.querySelector('.plyr1');
+  }
+
+  if (player === 'plyr1') { // player1 turn
     
-    oppGrid.onclick = (e) => {
+    enemyWaters.onclick = (e) => {
       console.log('click')
       
       const targSq = e.target.closest('.sq');
-
       if (targSq) {
-        playerAttack(player1, targSq);
+        playerAttack(plyr1, targSq);
+        // enemyWaters.onclick = null;
+        setTimeout(() => {
+          startBattle(plyr1, plyr2, turnCount += 1);
+        }, 2000)
+        
         // let attackCoord = +targSq.dataset.nmbr;
 
         // if (player1.attacks.includes(attackCoord)) {
@@ -125,14 +168,18 @@ function startBattle(player1, opponent, turnCount = 0) {
         // }
 
         // msgPlayer(msg);
-
-
-        // oppGrid.onclick = null;
-
-        // startBattle(player1, opponent, turnCount++);
       }
     };
   } 
+
+  else {
+    console.log('player2')
+    computerAttack(plyr2, enemyWaters);
+
+    setTimeout(() => {
+      startBattle(plyr1, plyr2, turnCount += 1);
+    }, 2000)
+  }
   
   // if (turn === 'computer') {
   //   setTimeout(() => {
