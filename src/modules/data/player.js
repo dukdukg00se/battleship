@@ -50,13 +50,7 @@ export default class Player {
   reportAttackResult2(attack, opp = this.opponent) {
     const { fleet, shipsLost } = opp.board;
 
-    let attackResult;
-
-    if (opp.board.fleetLost()) return 'allSunk';
-
-    shipsLost.forEach((ship) => {
-      if (ship.position.includes(attack)) return `sunk ${ship.name}`;
-    });
+    let attackResult = 'miss';
 
     fleet.forEach((ship) => {
       if (ship.position.includes(attack)) {
@@ -64,7 +58,11 @@ export default class Player {
       }
     });
 
-    if (!attackResult) attackResult = 'miss';
+    shipsLost.forEach((ship) => {
+      if (ship.position.includes(attack)) attackResult = `sunk ${ship.name}`;
+    });
+
+    if (opp.board.fleetLost()) attackResult = 'destroyed';
 
     return attackResult;
   }

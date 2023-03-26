@@ -75,21 +75,19 @@ function computerAttack(plyr, grid) {
 
     console.log(result);
 
-    // Fix
-    // For a hit, comp doesn't know which ship
-
     if (result === 'miss') {
       sq.firstChild.classList.add('miss');
       msg = 'THE ENEMY FIRES A SHOT INTO YOUR WATERS... AND MISSES!';
     } else {
       sq.firstChild.classList.add('hit');
 
-      if (result === 'hit') {
-        msg = `THE ENEMY FIRES A SHOT INTO YOUR WATERS... AND HITS YOUR ${result}!`;
-      } else if (result === 'allSunk') {
-        msg = `THE ENEMY SANK YOUR LAST SHIP, YOU LOST!`;
+      let ship = result.match(/\w+$/g);
+      if (/hit/.test(result)) {
+        msg = `THE ENEMY FIRES A SHOT INTO YOUR WATERS... AND HITS YOUR ${ship}!`;
+      } else if (/sunk/.test(result)) {
+        msg = `THE ENEMY FIRES A SHOT INTO YOUR WATERS... AND SINKS YOUR ${ship}!`;
       } else {
-        msg = `THE ENEMY FIRES A SHOT INTO YOUR WATERS... AND SINKS YOUR ${result}!`;
+        msg = `THE ENEMY SANK YOUR LAST SHIP, YOU ARE DEFEATED!`;
       }
     }
 
