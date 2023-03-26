@@ -1,6 +1,10 @@
 import Player from './data/player';
 import AIPlayer from './data/ai-player';
-import { getCeiling, isCoordsEligible, getPositionCoords } from './data/aux-helper-fns';
+import {
+  getCeiling,
+  isCoordsEligible,
+  getPositionCoords,
+} from './data/aux-helper-fns';
 import {
   removeShadows,
   changeAxis,
@@ -44,7 +48,6 @@ function playerAttack(plyr, sq) {
   if (result === 'miss') {
     sq.firstChild.classList.add('miss');
     msg = `YOU FIRE A SHOT INTO ENEMY WATERS... AND MISS!`;
-
   } else {
     sq.firstChild.classList.add('hit');
 
@@ -57,53 +60,51 @@ function playerAttack(plyr, sq) {
     }
   }
 
-  msgPlayer(msg);  
+  msgPlayer(msg);
 }
 
 function computerAttack(plyr, grid) {
-  let msg = `THE ENEMY IS RETURNING FIRE...`;
+  let msg = `THE ENEMY IS AIMING...`;
 
   setTimeout(() => {
     plyr.autoAttack();
-    const result = plyr.reportAttackResult();
     const attack = plyr.reportAttackCoord();
+    const result = plyr.reportAttackResult2(attack);
     const sq = grid.querySelector(`[data-nmbr="${attack}"]`);
     sq.append(markShot());
+
+    console.log(result);
+
+    // Fix
+    // For a hit, comp doesn't know which ship
 
     if (result === 'miss') {
       sq.firstChild.classList.add('miss');
       msg = 'THE ENEMY FIRES A SHOT INTO YOUR WATERS... AND MISSES!';
-
     } else {
       sq.firstChild.classList.add('hit');
 
       if (result === 'hit') {
         msg = `THE ENEMY FIRES A SHOT INTO YOUR WATERS... AND HITS YOUR ${result}!`;
-
       } else if (result === 'allSunk') {
         msg = `THE ENEMY SANK YOUR LAST SHIP, YOU LOST!`;
-
       } else {
         msg = `THE ENEMY FIRES A SHOT INTO YOUR WATERS... AND SINKS YOUR ${result}!`;
       }
-
     }
 
-    msgPlayer(msg); 
-  }, 2000)
+    msgPlayer(msg);
+  }, 2000);
 
-
-  msgPlayer(msg);  
+  msgPlayer(msg);
 }
 
 function startBattle(plyr1, plyr2, turnCount = 0) {
-
-  console.log(turnCount)
+  // console.log(turnCount)
 
   let msg;
   let player;
   let enemyWaters;
-
 
   if (turnCount === 0) {
     msg = `ENEMY DETECTED, AWAITING ORDERS ADMIRAL...`;
@@ -118,19 +119,20 @@ function startBattle(plyr1, plyr2, turnCount = 0) {
     enemyWaters = document.querySelector('.plyr1');
   }
 
-  if (player === 'plyr1') { // player1 turn
-    
+  if (player === 'plyr1') {
+    // player1 turn
+
     enemyWaters.onclick = (e) => {
-      console.log('click')
-      
+      // console.log('click')
+
       const targSq = e.target.closest('.sq');
       if (targSq) {
         playerAttack(plyr1, targSq);
         // enemyWaters.onclick = null;
         setTimeout(() => {
-          startBattle(plyr1, plyr2, turnCount += 1);
-        }, 2000)
-        
+          startBattle(plyr1, plyr2, (turnCount += 1));
+        }, 2000);
+
         // let attackCoord = +targSq.dataset.nmbr;
 
         // if (player1.attacks.includes(attackCoord)) {
@@ -170,17 +172,15 @@ function startBattle(plyr1, plyr2, turnCount = 0) {
         // msgPlayer(msg);
       }
     };
-  } 
-
-  else {
-    console.log('player2')
+  } else {
+    console.log('player2');
     computerAttack(plyr2, enemyWaters);
 
     setTimeout(() => {
-      startBattle(plyr1, plyr2, turnCount += 1);
-    }, 2000)
+      startBattle(plyr1, plyr2, (turnCount += 1));
+    }, 2000);
   }
-  
+
   // if (turn === 'computer') {
   //   setTimeout(() => {
   //     msg = `THE ENEMY IS RETURNING FIRE...`;
@@ -279,10 +279,6 @@ function startBattle(plyr1, plyr2, turnCount = 0) {
   // }
 }
 
-
-
-
-
 function startGame(name) {
   const player1 = new Player(name);
   const player2 = new AIPlayer();
@@ -305,7 +301,7 @@ function startGame(name) {
 
 function selectAction(player, opponent, event) {
   const playerShips = player.board.fleet;
-  
+
   if (event.target.id === 'axis') {
     changeAxis(event);
   } else if (event.target.id === 'clear') {
@@ -315,13 +311,14 @@ function selectAction(player, opponent, event) {
   } else if (event.target.id === 'battle') {
     if (playerShips[playerShips.length - 1].position.length > 0) {
       const positContainer = document.querySelector('.posit-container');
-      positContainer.style.animation = '.5s ease-in 0s 1 normal forwards running fadeout';
+      positContainer.style.animation =
+        '.5s ease-in 0s 1 normal forwards running fadeout';
 
       event.target.disabled = true;
       event.target.classList.add('undisable');
 
       setTimeout(() => {
-        positContainer.parentNode.append(createBattleGrids(player, opponent))
+        positContainer.parentNode.append(createBattleGrids(player, opponent));
         positContainer.remove();
 
         showFleetPosition(player);
@@ -335,8 +332,9 @@ function selectAction(player, opponent, event) {
 
     let msg = `Admiral ${player.name}, you must prepare your fleet for battle. Please position your ships.`;
     msgPlayer(msg.toUpperCase());
-  } else { // random btn
-    
+  } else {
+    // random btn
+
     removeShipPositions();
     player.autoPositionFleet();
     playerShips.forEach((ship) => {
@@ -347,7 +345,6 @@ function selectAction(player, opponent, event) {
     placePlayerShips(player, playerShips.length);
   }
 }
-
 
 function placePlayerShips(player, index = 0, exclude = []) {
   const grid = document.querySelector('.grid');
@@ -387,7 +384,7 @@ function placePlayerShips(player, index = 0, exclude = []) {
         showShipPosition(shipPosition);
 
         if (currentShip.position.length > 0) {
-          placePlayerShips(player, index += 1, exclude);
+          placePlayerShips(player, (index += 1), exclude);
         }
       }
     };

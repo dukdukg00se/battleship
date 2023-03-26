@@ -21,7 +21,10 @@ export default class Player {
     opp.board.receiveAttack(coord);
   }
 
-  reportAttackResult(attack = this.attacks[this.attacks.length - 1], opp = this.opponent) {
+  reportAttackResult(
+    attack = this.attacks[this.attacks.length - 1],
+    opp = this.opponent
+  ) {
     const { board } = opp;
     const oppFleetCoords = board.fleet.reduce((coords, ship) => {
       coords.push(...ship.position);
@@ -34,9 +37,34 @@ export default class Player {
     let attackResult;
 
     if (board.fleetLost()) attackResult = 'allSunk';
-    else if (oppLostShipsCoords.includes(attack)) attackResult = board.shipsLost[board.shipsLost.length - 1].name;
+    else if (oppLostShipsCoords.includes(attack))
+      attackResult = board.shipsLost[board.shipsLost.length - 1].name;
     else if (oppFleetCoords.includes(attack)) attackResult = 'hit';
     else attackResult = 'miss';
+
+    return attackResult;
+  }
+
+  // Work on this to return hit ships name
+  // For computer attack msg
+  reportAttackResult2(attack, opp = this.opponent) {
+    const { fleet, shipsLost } = opp.board;
+
+    let attackResult;
+
+    if (opp.board.fleetLost()) return 'allSunk';
+
+    shipsLost.forEach((ship) => {
+      if (ship.position.includes(attack)) return `sunk ${ship.name}`;
+    });
+
+    fleet.forEach((ship) => {
+      if (ship.position.includes(attack)) {
+        attackResult = `hit ${ship.name}`;
+      }
+    });
+
+    if (!attackResult) attackResult = 'miss';
 
     return attackResult;
   }
@@ -58,9 +86,9 @@ export default class Player {
   }
 
   resetFleet(fleet = this.board.fleet) {
-    fleet.forEach(ship => {
+    fleet.forEach((ship) => {
       ship.position = [];
-    })
+    });
   }
 
   getRandomCoord(exclude = this.attacks, gridSize = 100) {
