@@ -17,7 +17,7 @@
 
 .prompt-wrapper {
   width: 55vmin;
-  height: 9vmin;
+  height: 12vmin;
   border: solid 0.1rem white;
   border-radius: 10px;
   font-size: 2.3vmin;
@@ -25,11 +25,13 @@
   background: #020038;
   padding: 1rem;
 
+  text-align: center;
   min-width: 24rem;
   max-width: 55rem;
   max-height: 11rem;
   min-height: 6rem;
 }
+
 
 .btns-container {
   display: flex;
@@ -72,10 +74,10 @@ button {
 }
 
 
-.lock:hover {
+/* .lock:hover {
   background-color: rgba(255, 60, 60, 0.6);
   cursor: not-allowed;
-}
+} */
 
 @media (max-width: 434px) {
   .info-wrap {

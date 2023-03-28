@@ -13,6 +13,7 @@ export default class Player {
     this.name = name;
     this.board = new Gameboard();
     this.attacks = [];
+    this.winner = false;
     this.opponent = null;
   }
 
@@ -54,12 +55,14 @@ export default class Player {
 
     fleet.forEach((ship) => {
       if (ship.position.includes(attack)) {
-        attackResult = `hit ${ship.name}`;
+        // attackResult = `hit ${ship.name}`;
+        attackResult = `hit`;
       }
     });
 
     shipsLost.forEach((ship) => {
-      if (ship.position.includes(attack)) attackResult = `sunk ${ship.name}`;
+      // if (ship.position.includes(attack)) attackResult = `sunk ${ship.name}`;
+      if (ship.position.includes(attack)) attackResult = `sunk`;
     });
 
     if (opp.board.fleetLost()) attackResult = 'destroyed';
@@ -70,6 +73,21 @@ export default class Player {
   reportAttackCoord(attacks = this.attacks) {
     return attacks[attacks.length - 1];
   }
+
+  identifyEnemyShip(attackCoord, oppFleet = this.opponent.board.fleet) {
+    let targetShip;
+    oppFleet.forEach(ship => {
+      ship.position.forEach(coord => {
+        if (coord === attackCoord) targetShip = ship; 
+      })
+    })
+
+    return targetShip;
+  } 
+
+
+
+
 
   assembleFleet(fleet = this.board.fleet) {
     const allShips = [
