@@ -46,8 +46,6 @@ export default class Player {
     return attackResult;
   }
 
-  // Work on this to return hit ships name
-  // For computer attack msg
   reportAttackResult2(attack, opp = this.opponent) {
     const { fleet, shipsLost } = opp.board;
 
@@ -76,18 +74,14 @@ export default class Player {
 
   identifyEnemyShip(attackCoord, oppFleet = this.opponent.board.fleet) {
     let targetShip;
-    oppFleet.forEach(ship => {
-      ship.position.forEach(coord => {
-        if (coord === attackCoord) targetShip = ship; 
-      })
-    })
+    oppFleet.forEach((ship) => {
+      ship.position.forEach((coord) => {
+        if (coord === attackCoord) targetShip = ship;
+      });
+    });
 
     return targetShip;
-  } 
-
-
-
-
+  }
 
   assembleFleet(fleet = this.board.fleet) {
     const allShips = [
