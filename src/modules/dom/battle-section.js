@@ -20,10 +20,10 @@ function createBattleGrids(player, opponent) {
   gridsContainer.classList.add('grid-container');
   playerWrapper.classList.add('player-wrapper');
   playerHeader.textContent = 'FRIENDLY WATERS';
-  playerGrid.classList.add(player.name, 'battle-grid');
+  playerGrid.classList.add('plyr1', 'battle-grid');
   oppWrapper.classList.add('opp-wrapper')
   oppHeader.textContent = 'ENEMY WATERS';
-  oppGrid.classList.add(opponent.name, 'battle-grid');
+  oppGrid.classList.add('plyr2', 'battle-grid');
   addClassToSqs(oppGrid, 'target');
 
   playerWrapper.append(playerHeader, playerGrid);
