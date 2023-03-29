@@ -243,7 +243,7 @@ function selectAction(player, opponent, event) {
       event.target.classList.add('undisable');
 
       setTimeout(() => {
-        positContainer.parentNode.append(createBattleGrids(player, opponent));
+        positContainer.parentNode.append(createBattleGrids());
         positContainer.remove();
 
         showFleetPosition(player);
