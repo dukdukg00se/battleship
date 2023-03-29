@@ -14,11 +14,12 @@ import {
   showFleetPosition,
   showShipSunk,
   unlockSq,
-
 } from './dom/aux-dom-fns';
 import { createBattleGrids, markShot } from './dom/battle-section';
 import { createPositUI } from './dom/positioning-section';
 import playerPrompt from './dom/player-prompt';
+import declareWinner from './dom/winner-section';
+import startForm from './dom/start-form';
 
 /* eslint-disable */
 
@@ -37,6 +38,10 @@ function playerAttack(plyr, sq) {
   const attackCoord = +sq.dataset.nmbr;
   let msg;
 
+  const promptWrapper = document.querySelector('.prompt-wrapper');
+  const gridContainer = document.querySelector('.grid-container');
+  const main = document.querySelector('main');
+
   if (plyr.attacks.includes(attackCoord)) {
     return 'repeat';
   }
@@ -44,7 +49,7 @@ function playerAttack(plyr, sq) {
   sq.append(markShot());
   sq.classList.toggle('lock', 'target');
 
-  plyr.attack(attackCoord); 
+  plyr.attack(attackCoord);
   const result = plyr.reportAttackResult2(attackCoord);
 
   if (result === 'miss') {
@@ -60,24 +65,43 @@ function playerAttack(plyr, sq) {
     } else if (result === 'sunk') {
       msg = `YOU FIRE A SHOT INTO ENEMY WATERS... AND SINK THEIR ${ship.name}!`;
 
-      showShipSunk(ship.position, sq.parentNode)
-
+      showShipSunk(ship.position, sq.parentNode);
     } else {
       msg = `YOU FIRE A SHOT INTO ENEMY WATERS... AND SINK THEIR ${ship.name}! CONGRATULATIONS, YOU SANK THE LAST ENEMY SHIP!`;
 
-      showShipSunk(ship.position, sq.parentNode)
+      showShipSunk(ship.position, sq.parentNode);
 
       plyr.winner = true;
+
+      setTimeout(() => {
+        promptWrapper.classList.add('disappear');
+        gridContainer.classList.add('disappear');
+      }, 5000);
+      setTimeout(() => {
+        promptWrapper.remove();
+        gridContainer.remove();
+        main.append(declareWinner(plyr.name));
+
+        const resetBtn = document.getElementById('reset-btn');
+        resetBtn.onclick = () => {
+          const main = document.querySelector('main');
+          const winnerSection = document.querySelector('.winner-section');
+          winnerSection.remove();
+          main.append(startForm());
+          initNewGame();
+        };
+      }, 5900);
     }
   }
 
   msgPlayer(msg);
 }
 
-
-
-
 function computerAttack(plyr, grid) {
+  const promptWrapper = document.querySelector('.prompt-wrapper');
+  const gridContainer = document.querySelector('.grid-container');
+  const main = document.querySelector('main');
+
   setTimeout(() => {
     let msg;
     plyr.autoAttack();
@@ -86,7 +110,6 @@ function computerAttack(plyr, grid) {
 
     const sq = grid.querySelector(`[data-nmbr="${attackCoord}"]`);
     sq.append(markShot());
-
 
     if (result === 'miss') {
       sq.firstChild.classList.add('miss');
@@ -101,36 +124,50 @@ function computerAttack(plyr, grid) {
       } else if (result === 'sunk') {
         msg = `THE ENEMY FIRES A SHOT INTO YOUR WATERS... AND SINKS YOUR ${ship.name}!`;
 
-        showShipSunk(ship.position, sq.parentNode)
-
+        showShipSunk(ship.position, sq.parentNode);
       } else {
         msg = `THE ENEMY FIRES A SHOT INTO YOUR WATERS... AND SINKS YOUR ${ship.name}! YOU ARE DEFEATED!`;
 
-        showShipSunk(ship.position, sq.parentNode)
+        showShipSunk(ship.position, sq.parentNode);
 
         plyr.winner = true;
+
+        setTimeout(() => {
+          promptWrapper.classList.add('disappear');
+          gridContainer.classList.add('disappear');
+        }, 5000);
+        setTimeout(() => {
+          promptWrapper.remove();
+          gridContainer.remove();
+          main.append(declareWinner(plyr.name));
+
+          const resetBtn = document.getElementById('reset-btn');
+          resetBtn.onclick = () => {
+            const main = document.querySelector('main');
+            const winnerSection = document.querySelector('.winner-section');
+            winnerSection.remove();
+            main.append(startForm());
+            initNewGame();
+          };
+        }, 5900);
       }
     }
 
     msgPlayer(msg);
-  }, 2000);
+  }, 1200);
 }
 
-
-
-
 function startBattle(plyr1, plyr2, turnCount = 0) {
-
   let msg;
   let player;
   let enemyWaters;
 
   if (turnCount === 0) {
-    console.log(plyr2.board.fleet)
+    console.log(plyr2.board.fleet);
 
     msg = `ENEMY DETECTED, AWAITING ORDERS ADMIRAL...`;
     msgPlayer(msg);
-  } 
+  }
 
   if (turnCount % 2 === 0) {
     player = plyr1;
@@ -140,98 +177,32 @@ function startBattle(plyr1, plyr2, turnCount = 0) {
     enemyWaters = document.querySelector('.plyr1');
   }
 
-  if (player.winner) {
-    console.log('game over');
-    return;
+  if (player === plyr1) {
+    enemyWaters.onclick = (e) => {
+      const targSq = e.target.closest('.sq');
+      if (targSq) {
+        const turn = playerAttack(player, targSq);
 
-  } else {
+        if (turn != 'repeat') {
+          enemyWaters.onclick = null;
 
-    if (player === plyr1) {
-      enemyWaters.onclick = (e) => {
-        const targSq = e.target.closest('.sq');
-        if (targSq) {
-        
-          const turn = playerAttack(player, targSq);       
-
-          if (turn != 'repeat') {
-            enemyWaters.onclick = null;
-
-            setTimeout(() => {
-              startBattle(plyr1, plyr2, (turnCount += 1));
-            }, 2500);
-          }
-
+          setTimeout(() => {
+            startBattle(plyr1, plyr2, (turnCount += 1));
+          }, 2600);
         }
-      };
+      }
+    };
+  } else {
+    msg = `THE ENEMY IS AIMING...`;
+    msgPlayer(msg);
 
-    } else {
+    computerAttack(player, enemyWaters);
 
-      msg = `THE ENEMY IS AIMING...`;
-      msgPlayer(msg);
-
-      computerAttack(player, enemyWaters);
-
-      setTimeout(() => {
-        startBattle(plyr1, plyr2, (turnCount += 1));
-      }, 2000);
-    }
-    
+    setTimeout(() => {
+      startBattle(plyr1, plyr2, (turnCount += 1));
+    }, 2600);
   }
-
-
 }
-
-
-
-
-
-
-
-
-// function startBattle(plyr1, plyr2, turnCount = 0) {
-//   console.log(plyr2.board.fleet);
-
-//   let msg;
-//   let player;
-//   let enemyWaters;
-
-//   if (turnCount === 0) {
-//     msg = `ENEMY DETECTED, AWAITING ORDERS ADMIRAL...`;
-//     msgPlayer(msg);
-//   }
-
-//   if (turnCount % 2 === 0) {
-//     player = 'plyr1';
-//     enemyWaters = document.querySelector('.plyr2');
-//   } else {
-//     player = 'plyr2';
-//     enemyWaters = document.querySelector('.plyr1');
-//   }
-
-//   if (player === 'plyr1') {
-//     enemyWaters.onclick = (e) => {
-//       const targSq = e.target.closest('.sq');
-//       if (targSq) {
-//         playerAttack(plyr1, targSq);
-//         // enemyWaters.onclick = null;
-//         setTimeout(() => {
-//           startBattle(plyr1, plyr2, (turnCount += 1));
-//         }, 2500);
-//       }
-//     };
-//   } else {
-//     computerAttack(plyr2, enemyWaters);
-
-//     setTimeout(() => {
-//       startBattle(plyr1, plyr2, (turnCount += 1));
-//     }, 2000);
-//   }
-// }
-
-
-
-
-
 
 function startGame(name) {
   const player1 = new Player(name);
@@ -277,8 +248,6 @@ function selectAction(player, opponent, event) {
 
         showFleetPosition(player);
         startBattle(player, opponent);
-        // msg = `ENEMY DETECTED, AWAITING ORDERS ADMIRAL...`;
-        // msgPlayer(msg);
       }, 500);
 
       return;
@@ -326,7 +295,7 @@ function placePlayerShips(player, index = 0, exclude = []) {
         if (isCoordsEligible(exclude, shipPosition, max)) {
           unlockSq(sq);
           showShipShadow(shipPosition);
-          shipPosition.forEach
+          shipPosition.forEach;
         }
       }
     };
@@ -338,9 +307,6 @@ function placePlayerShips(player, index = 0, exclude = []) {
 
         showShipPosition(shipPosition);
         // showShipOutline(shipPosition);
-
-
-
 
         if (currentShip.position.length > 0) {
           placePlayerShips(player, (index += 1), exclude);
@@ -354,15 +320,11 @@ function placePlayerShips(player, index = 0, exclude = []) {
   msgPlayer(msg.toUpperCase());
 }
 
-// Initialize a new game by setting listener to submit btn
 export default function initNewGame() {
   const submitBtn = document.querySelector('form > button');
   submitBtn.addEventListener('click', processForm);
 }
 
-// Process start form
-// If name missing show err msg
-// Else remove form, add posit page and start game
 function processForm(e) {
   const main = document.querySelector('main');
   const form = document.querySelector('form');
