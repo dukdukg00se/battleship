@@ -162,6 +162,8 @@ function startBattle(plyr1, plyr2, turnCount = 0) {
   let player;
   let enemyWaters;
 
+  let winnerDeclared;
+
   if (turnCount === 0) {
     console.log(plyr2.board.fleet);
 
@@ -172,35 +174,65 @@ function startBattle(plyr1, plyr2, turnCount = 0) {
   if (turnCount % 2 === 0) {
     player = plyr1;
     enemyWaters = document.querySelector('.plyr2');
+
+    winnerDeclared = plyr2.winner;
   } else {
     player = plyr2;
     enemyWaters = document.querySelector('.plyr1');
+
+    winnerDeclared = plyr1.winner;
   }
 
   if (player === plyr1) {
-    enemyWaters.onclick = (e) => {
-      const targSq = e.target.closest('.sq');
-      if (targSq) {
-        const turn = playerAttack(player, targSq);
+    if (!winnerDeclared) {
+      enemyWaters.onclick = (e) => {
+        const targSq = e.target.closest('.sq');
+        if (targSq) {
+          const turn = playerAttack(player, targSq);
 
-        if (turn != 'repeat') {
-          enemyWaters.onclick = null;
+          if (turn != 'repeat') {
+            enemyWaters.onclick = null;
 
-          setTimeout(() => {
-            startBattle(plyr1, plyr2, (turnCount += 1));
-          }, 2600);
+            setTimeout(() => {
+              startBattle(plyr1, plyr2, (turnCount += 1));
+            }, 2600);
+          }
         }
-      }
-    };
+      };
+    }
+    // enemyWaters.onclick = (e) => {
+    //   const targSq = e.target.closest('.sq');
+    //   if (targSq) {
+    //     const turn = playerAttack(player, targSq);
+
+    //     if (turn != 'repeat') {
+    //       enemyWaters.onclick = null;
+
+    //       setTimeout(() => {
+    //         startBattle(plyr1, plyr2, (turnCount += 1));
+    //       }, 2600);
+    //     }
+    //   }
+    // };
   } else {
-    msg = `THE ENEMY IS AIMING...`;
-    msgPlayer(msg);
+    if (!winnerDeclared) {
+      msg = `THE ENEMY IS AIMING...`;
+      msgPlayer(msg);
 
-    computerAttack(player, enemyWaters);
+      computerAttack(player, enemyWaters);
 
-    setTimeout(() => {
-      startBattle(plyr1, plyr2, (turnCount += 1));
-    }, 2600);
+      setTimeout(() => {
+        startBattle(plyr1, plyr2, (turnCount += 1));
+      }, 2600);
+    }
+    // msg = `THE ENEMY IS AIMING...`;
+    // msgPlayer(msg);
+
+    // computerAttack(player, enemyWaters);
+
+    // setTimeout(() => {
+    //   startBattle(plyr1, plyr2, (turnCount += 1));
+    // }, 2600);
   }
 }
 
