@@ -200,20 +200,6 @@ function startBattle(plyr1, plyr2, turnCount = 0) {
         }
       };
     }
-    // enemyWaters.onclick = (e) => {
-    //   const targSq = e.target.closest('.sq');
-    //   if (targSq) {
-    //     const turn = playerAttack(player, targSq);
-
-    //     if (turn != 'repeat') {
-    //       enemyWaters.onclick = null;
-
-    //       setTimeout(() => {
-    //         startBattle(plyr1, plyr2, (turnCount += 1));
-    //       }, 2600);
-    //     }
-    //   }
-    // };
   } else {
     if (!winnerDeclared) {
       msg = `THE ENEMY IS AIMING...`;
@@ -225,14 +211,6 @@ function startBattle(plyr1, plyr2, turnCount = 0) {
         startBattle(plyr1, plyr2, (turnCount += 1));
       }, 2600);
     }
-    // msg = `THE ENEMY IS AIMING...`;
-    // msgPlayer(msg);
-
-    // computerAttack(player, enemyWaters);
-
-    // setTimeout(() => {
-    //   startBattle(plyr1, plyr2, (turnCount += 1));
-    // }, 2600);
   }
 }
 
