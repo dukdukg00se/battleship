@@ -9,27 +9,9 @@ body {
 
 html {
   font-size: 62.5%;
-  /* --light-text: white;
-  --dark-bkgrnd: black;
- */
 }
 
 body {
-  /* background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-attachment: fixed;
-  background-image: url(../assets/images/wallpapers/cloudy-d.svg);
-  font-size: 1.6rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: var(--light-text);
-  font-family: sans-serif;
-  padding: 3% 0;
-  min-width: 275px;
-  min-height: 100vh; */
   display: flex;
   flex-direction: column;
   color: #f0f0f2;
@@ -69,29 +51,14 @@ header > div > img:first-of-type {
   width: 80%;
 }
 
-/* .volume {
-  position: absolute;
-  top: 60%;
-  right: 0%;
-  fill: #f0f0f2;
-  width: 6%;
-  max-width: 3.2rem;
-} */
-
 main {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 1vmin;
-  padding: 5vmin;
+  gap: 4vmin;
+  padding: 4vmin;
 }
-
-/* @media (max-width: 500px), (max-height: 500px) {
-  main {
-    padding-top: 5rem;
-  }
-} */
 
 @media (max-height: 500px) {
   main {
@@ -111,140 +78,6 @@ main {
 .disappear {
   animation: 0.9s ease-in 0s 1 normal forwards running fadeout;
 }
-
-/* Form styles */
-/* @keyframes fadein {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rem;
-  animation: 6s ease-in 0s 1 normal none running fadein;
-  font-size: 3vmin;
-}
-
-#input-name {
-  font-family: 'Bebas Neue', cursive;
-  font-size: 3vmin;
-  padding: 1rem;
-}
-
-form > p {
-  color: red;
-  visibility: hidden;
-}
-
-form > button {
-  height: 5.5vmin;
-  width: 14vmin;
-  padding: 0.5vmin;
-  border-radius: 4px;
-  font-family: 'Bebas Neue', cursive;
-  font-size: 2.8vmin;
-}
-
-@media (max-width: 675px), (max-height: 680px) {
-  form {
-    font-size: 2rem;
-  }
-
-  #input-name {
-    height: 4.6rem;
-    width: 19rem;
-    font-size: 2rem;
-  }
-
-  form > button {
-    height: 3.7rem;
-    width: 9rem;
-    font-size: 1.9rem;
-  }
-} */
-
-/* Position styles */
-/* .posit-container {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  align-items: center;
-}
-
-.posit-container > div:first-child {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.5rem;
-}
-
-.info-wrap {
-  width: 55vmin;
-  height: 9vmin;
-  border: solid 0.1rem white;
-  border-radius: 10px;
-  font-size: 2.3vmin;
-  font-family: monospace;
-  background: #020038;
-  padding: 1rem;
-
-  min-width: 24rem;
-  max-width: 55rem;
-  max-height: 11rem;
-  min-height: 6rem;
-}
-
-.info-wrap + button {
-  height: 4.5vmin;
-  width: 11vmin;
-  padding: 0.5vmin;
-  border-radius: 4px;
-  font-family: 'Bebas Neue', cursive;
-  font-size: 2.5vmin;
-}
-
-
-.grid {
-  display: flex;
-  gap: 1%;
-  width: 50vmin;
-  height: 50vmin;
-  min-width: 25rem;
-  min-height: 25rem;
-  flex-wrap: wrap;
-  max-width: 60rem;
-  max-height: 60rem;
-  justify-content: center;
-}
-
-.sq {
-  width: 9%;
-  height: 9%;
-  border: solid 2px white;
-}
-
-@media (max-width: 434px) {
-  .info-wrap {
-    font-size: 1rem;
-  }
-} */
-
-/* .unlock {
-  cursor: pointer;
-  background-color: rgb(255 255 255 / 90%);
-  transition: all 0.3s ease 0s;
-}
-
-.placed {
-  background-color: #28a0ff;
-} */
-
 
 
 
@@ -301,15 +134,6 @@ form > button {
   }
 }
 
-/* .clear {
-  animation: 0.3s ease-in 0s 1 normal forwards running clear;
-} */
-
-/* .appear {
-  animation: 0.3s ease-in 0s 1 normal none running appear;
-} */
-
-/* Battle styles */
 .grid-container {
   display: flex;
   justify-content: center;
@@ -390,8 +214,32 @@ h3 {
   border-bottom-right-radius: 50%
 }
 
-/* border-bottom-left-radius: 50%;
-border-bottom-right-radius: 50%
 
-border-bottom-right-radius: 50%;
-border-top-right-radius: 50%; */
+
+
+
+
+.winner-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 7vmin;
+  gap: 2vmin;
+
+  animation: 2s ease-in 0s 1 normal none running fadein;
+}
+
+.winner-section > h2 {
+  color: #b8bdbc;
+}
+
+.winner-section > h3 {
+  font-size: 9vmin;
+}
+
+#reset-btn {
+  font-size: 3vmin;
+  height: 6vmin;
+  width: 15vmin;
+}
