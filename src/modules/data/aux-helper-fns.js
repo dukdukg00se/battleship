@@ -17,10 +17,6 @@ function pickADir() {
   return Math.round(Math.random()) === 0 ? 'x' : 'y';
 }
 
-function isRedundant(parentArr, childArr) {
-  return childArr.some((element) => parentArr.includes(element));
-}
-
 function isCoordsEligible(parentArr, childArr, maxVal) {
   if (childArr.some((element) => parentArr.includes(element))) return false;
   if (childArr[childArr.length - 1] > maxVal) return false;
@@ -45,7 +41,6 @@ export {
   getFloor,
   getCeiling,
   isCoordsEligible,
-  isRedundant,
   genNmbr,
   pickADir,
   getPositionCoords,
