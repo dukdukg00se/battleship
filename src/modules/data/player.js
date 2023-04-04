@@ -3,9 +3,9 @@ import Ship from './ship';
 import {
   genNmbr,
   getCeiling,
-  isRedundant,
   pickADir,
   getPositionCoords,
+  isCoordsEligible,
 } from './aux-helper-fns';
 
 export default class Player {
@@ -17,85 +17,59 @@ export default class Player {
     this.opponent = null;
   }
 
-  attack(coord, opp = this.opponent) {
+  attack(coord) {
+    const opp = this.opponent;
     this.attacks.push(coord);
     opp.board.receiveAttack(coord);
   }
 
-  reportAttackResult(
-    attack = this.attacks[this.attacks.length - 1],
-    opp = this.opponent
-  ) {
-    const { board } = opp;
-    const oppFleetCoords = board.fleet.reduce((coords, ship) => {
-      coords.push(...ship.position);
-      return coords;
-    }, []);
-    const oppLostShipsCoords = board.shipsLost.reduce((coords, ship) => {
-      coords.push(...ship.position);
-      return coords;
-    }, []);
-    let attackResult;
-
-    if (board.fleetLost()) attackResult = 'allSunk';
-    else if (oppLostShipsCoords.includes(attack))
-      attackResult = board.shipsLost[board.shipsLost.length - 1].name;
-    else if (oppFleetCoords.includes(attack)) attackResult = 'hit';
-    else attackResult = 'miss';
-
-    return attackResult;
-  }
-
-  reportAttackResult2(attack, opp = this.opponent) {
+  reportAttackResult(attackCoord) {
+    const opp = this.opponent;
     const { fleet, shipsLost } = opp.board;
 
-    let attackResult = 'miss';
+    let result = 'miss';
 
-    fleet.forEach((ship) => {
-      if (ship.position.includes(attack)) {
-        // attackResult = `hit ${ship.name}`;
-        attackResult = `hit`;
-      }
-    });
+    if (fleet.some((ship) => ship.position.includes(attackCoord)))
+      result = 'hit';
 
-    shipsLost.forEach((ship) => {
-      // if (ship.position.includes(attack)) attackResult = `sunk ${ship.name}`;
-      if (ship.position.includes(attack)) attackResult = `sunk`;
-    });
+    if (shipsLost.some((ship) => ship.position.includes(attackCoord)))
+      result = 'sunk';
 
-    if (opp.board.fleetLost()) attackResult = 'destroyed';
+    if (opp.board.fleetLost()) result = 'destroyed';
 
-    return attackResult;
+    return result;
   }
 
-  reportAttackCoord(attacks = this.attacks) {
+  reportAttackCoord() {
+    const { attacks } = this;
     return attacks[attacks.length - 1];
   }
 
-  identifyEnemyShip(attackCoord, oppFleet = this.opponent.board.fleet) {
+  identifyEnemyShip(attackCoord) {
+    const { fleet } = this.opponent.board;
     let targetShip;
-    oppFleet.forEach((ship) => {
-      ship.position.forEach((coord) => {
-        if (coord === attackCoord) targetShip = ship;
-      });
+    fleet.forEach((ship) => {
+      if (ship.position.includes(attackCoord)) targetShip = ship;
     });
 
     return targetShip;
   }
 
-  assembleFleet(fleet = this.board.fleet) {
+  assembleFleet() {
     const allShips = [
       new Ship('CARRIER', 5),
       new Ship('BATTLESHIP', 4),
-      new Ship('PATROL BOAT', 2),
       new Ship('DESTROYER', 3),
       new Ship('SUBMARINE', 3),
+      new Ship('PATROL BOAT', 2),
     ];
 
+    const { fleet } = this.board;
     allShips.forEach((ship) => fleet.push(ship));
   }
 
-  resetFleet(fleet = this.board.fleet) {
+  resetFleet() {
+    const { fleet } = this.board;
     fleet.forEach((ship) => {
       ship.position = [];
     });
@@ -112,18 +86,10 @@ export default class Player {
   place(ship, exclude) {
     const startCoord = this.getRandomCoord(exclude);
     const axis = pickADir();
-    const max = getCeiling(startCoord, axis);
+    const ceil = getCeiling(startCoord, axis);
     const shipPosition = [...getPositionCoords(ship, startCoord, axis)];
 
-    // for (let i = 0; i < ship.length; i += 1) {
-    //   const coord = axis === 'x' ? startCoord + i : startCoord + i * 10;
-    //   shipPosition.push(coord);
-    // }
-
-    if (
-      isRedundant(exclude, shipPosition) ||
-      shipPosition[shipPosition.length - 1] > max
-    ) {
+    if (!isCoordsEligible(exclude, shipPosition, ceil)) {
       return this.place(ship, exclude);
     }
 
