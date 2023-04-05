@@ -1,4 +1,4 @@
-import '../../styles/form.css';
+import '../../styles/start-form.css';
 
 export default function createForm() {
   const form = document.createElement('form');

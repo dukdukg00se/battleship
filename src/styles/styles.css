@@ -23,7 +23,6 @@ body {
     rgb(18, 18, 172) 50%,
     rgb(2, 0, 75) 100%
   );
-
   min-width: 355px;
   min-height: 550px;
 }
@@ -34,7 +33,6 @@ header {
   display: flex;
   justify-content: center;
   padding: 2rem;
-  /* border: solid 2px white; */
 }
 
 header > div {
@@ -60,9 +58,30 @@ main {
   padding: 4vmin;
 }
 
-@media (max-height: 500px) {
-  main {
-    padding-top: 3.6rem;
+button {
+  height: 4.5vmin;
+  width: 11vmin;
+  padding: 0.5vmin;
+  border-radius: 4px;
+  font-family: 'Bebas Neue', cursive;
+  font-size: 2.5vmin;
+}
+
+.sq {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 9%;
+  height: 9%;
+  border: solid 2px white;
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 
@@ -79,16 +98,13 @@ main {
   animation: 0.9s ease-in 0s 1 normal forwards running fadeout;
 }
 
-
-
-
-.unlock {
-  cursor: pointer;
-}
-
-.ship-shadow {
-  background-color: rgb(255 255 255 / 90%);
-  transition: all 0.3s ease 0s;
+@keyframes appear {
+  from {
+    background-color: #28a0ff00;
+  }
+  to {
+    background-color: #28a0ff;
+  }
 }
 
 .ship-position {
@@ -96,102 +112,9 @@ main {
   animation: 0.5s ease-in 0s 1 normal none running appear;
 }
 
-.sunk {
-  background-color: #737373;
-  animation: 0.5s ease-in 0s 1 normal none running sunk;
-}
-
 .lock:hover {
   background-color: rgba(255, 60, 60, 0.6);
   cursor: not-allowed;
-}
-
-
-@keyframes sunk {
-  from {
-    background-color: #73737300
-  }
-  to {
-    background-color: #737373;
-  }
-}
-
-@keyframes clear {
-  from {
-    background-color: #28a0ff;
-  }
-  to {
-    background-color: #28a0ff00;
-  }
-}
-
-@keyframes appear {
-  from {
-    background-color: #28a0ff00
-  }
-  to {
-    background-color: #28a0ff;
-  }
-}
-
-.grid-container {
-  display: flex;
-  justify-content: center;
-  gap: 5%;
-  margin-top: 5%;
-  animation: 2s ease-in 0s 1 normal none running fadein;
-}
-
-.target:hover {
-  cursor: crosshair;
-  background-color: green;
-}
-
-/* Removes default disabled btn styles */
-.undisable {
-  background-color: rgb(239, 239, 239);
-  color: black;
-  border-style: outset;
-  border-color: buttonborder;
-}
-
-h3 {
-  text-align: center;
-  margin-bottom: 1rem;
-}
-
-
-
-
-
-.shot {
-  height: 40%;
-  width: 40%;
-  border-radius: 50%;
-  animation: 0.5s ease-in 0s 1 normal none running fadein;
-}
-
-.miss {
-  background-color: white;
-
-}
-
-.hit {
-  background-color: red;
-}
-
-
-
-
-.battle-grid {
-  display: flex;
-  gap: 1%;
-  width: 45vmin;
-  height: 45vmin;
-  min-width: 25rem;
-  min-height: 25rem;
-  flex-wrap: wrap;
-  justify-content: center;
 }
 
 .ship-start-x {
@@ -206,40 +129,16 @@ h3 {
 
 .ship-start-y {
   border-top-left-radius: 50%;
-  border-top-right-radius: 50%
+  border-top-right-radius: 50%;
 }
 
 .ship-end-y {
   border-bottom-left-radius: 50%;
-  border-bottom-right-radius: 50%
+  border-bottom-right-radius: 50%;
 }
 
-
-
-
-
-
-.winner-section {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-size: 7vmin;
-  gap: 2vmin;
-
-  animation: 2s ease-in 0s 1 normal none running fadein;
-}
-
-.winner-section > h2 {
-  color: #b8bdbc;
-}
-
-.winner-section > h3 {
-  font-size: 9vmin;
-}
-
-#reset-btn {
-  font-size: 3vmin;
-  height: 6vmin;
-  width: 15vmin;
+@media (max-height: 500px) {
+  main {
+    padding-top: 3.6rem;
+  }
 }

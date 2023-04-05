@@ -1,0 +1,23 @@
+.winner-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 7vmin;
+  gap: 2vmin;
+  animation: 2s ease-in 0s 1 normal none running fadein;
+}
+
+.winner-section > h2 {
+  color: #b8bdbc;
+}
+
+.winner-section > h3 {
+  font-size: 9vmin;
+}
+
+#reset-btn {
+  font-size: 3vmin;
+  height: 6vmin;
+  width: 15vmin;
+}

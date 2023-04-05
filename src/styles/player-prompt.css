@@ -1,0 +1,18 @@
+.prompt-wrapper {
+  width: 55vmin;
+  height: 12vmin;
+  border: solid 0.1rem white;
+  border-radius: 10px;
+  font-size: 2.3vmin;
+  font-family: monospace;
+  background: #020038;
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-width: 24rem;
+  max-width: 55rem;
+  max-height: 11rem;
+  min-height: 6rem;
+}

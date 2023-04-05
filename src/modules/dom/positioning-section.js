@@ -1,4 +1,4 @@
-import '../../styles/position.css';
+import '../../styles/positioning-section.css';
 
 function createGrid(maxSqs = 100) {
   const gridContainer = document.createElement('div');

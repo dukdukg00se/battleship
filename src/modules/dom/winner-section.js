@@ -1,3 +1,5 @@
+import '../../styles/winner-section.css';
+
 export default function declareWinner(name) {
   const container = document.createElement('div');
   const header = document.createElement('h2');

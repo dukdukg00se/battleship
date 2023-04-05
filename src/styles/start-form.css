@@ -1,25 +1,18 @@
-@keyframes fadein {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
 form {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 2rem;
   animation: 2s ease-in 0s 1 normal none running fadein;
-  font-size: 3vmin;
+  font-size: 4vmin;
 }
 
 #input-name {
   font-family: 'Bebas Neue', cursive;
   font-size: 3vmin;
   padding: 1rem;
+  width: 30vmin;
+  height: 6vmin;
 }
 
 form > p {
@@ -28,12 +21,9 @@ form > p {
 }
 
 form > button {
-  height: 5.5vmin;
-  width: 14vmin;
-  padding: 0.5vmin;
-  border-radius: 4px;
-  font-family: 'Bebas Neue', cursive;
-  font-size: 2.8vmin;
+  height: 6vmin;
+  width: 15vmin;
+  font-size: 3vmin;
 }
 
 @media (max-width: 675px), (max-height: 680px) {

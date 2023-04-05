@@ -1,4 +1,5 @@
 import { createGrid, addClassToSqs } from './positioning-section';
+import '../../styles/battle-section.css';
 
 /* eslint-disable */
 

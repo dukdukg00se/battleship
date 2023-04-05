@@ -1,0 +1,57 @@
+.grid-container {
+  display: flex;
+  justify-content: center;
+  gap: 5%;
+  margin-top: 5%;
+  animation: 2s ease-in 0s 1 normal none running fadein;
+}
+
+h3 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.battle-grid {
+  display: flex;
+  gap: 1%;
+  width: 45vmin;
+  height: 45vmin;
+  min-width: 25rem;
+  min-height: 25rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.shot {
+  height: 40%;
+  width: 40%;
+  border-radius: 50%;
+  animation: 0.5s ease-in 0s 1 normal none running fadein;
+}
+
+.miss {
+  background-color: white;
+}
+
+.hit {
+  background-color: red;
+}
+
+.target:hover {
+  cursor: crosshair;
+  background-color: green;
+}
+
+@keyframes sink {
+  from {
+    background-color: #73737300;
+  }
+  to {
+    background-color: #737373;
+  }
+}
+
+.sunk {
+  background-color: #737373;
+  animation: 0.5s ease-in 0s 1 normal none running sink;
+}

@@ -1,3 +1,5 @@
+import '../../styles/player-prompt.css';
+
 export default function createPlayerPrompt() {
   const promptWrapper = document.createElement('div');
   const heading = document.createElement('h2');
