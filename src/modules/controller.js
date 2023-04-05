@@ -21,8 +21,6 @@ import playerPrompt from './dom/player-prompt';
 import declareWinner from './dom/winner-section';
 import startForm from './dom/start-form';
 
-/* eslint-disable */
-
 function msgPlayer(text, i = 0) {
   if (i > text.length) return;
   const headMsg = document.querySelector('.prompt');
@@ -33,139 +31,14 @@ function msgPlayer(text, i = 0) {
   }, 30);
 }
 
-// startAttackBy()
-function playerAttack(plyr, sq) {
-  const attackCoord = +sq.dataset.nmbr;
-  let msg;
-
-  const promptWrapper = document.querySelector('.prompt-wrapper');
-  const gridContainer = document.querySelector('.grid-container');
-  const main = document.querySelector('main');
-
-  if (plyr.attacks.includes(attackCoord)) {
-    return 'repeat';
-  }
-
-  sq.append(markShot());
-  sq.classList.toggle('lock', 'target');
-
-  plyr.attack(attackCoord);
-  const result = plyr.reportAttackResult2(attackCoord);
-
-  if (result === 'miss') {
-    sq.firstChild.classList.add('miss');
-    msg = `YOU FIRE A SHOT INTO ENEMY WATERS... AND MISS!`;
-  } else {
-    sq.firstChild.classList.add('hit');
-
-    const ship = plyr.identifyEnemyShip(attackCoord);
-
-    if (result === 'hit') {
-      msg = `YOU FIRE A SHOT INTO ENEMY WATERS... AND HIT AN ENEMY SHIP!`;
-    } else if (result === 'sunk') {
-      msg = `YOU FIRE A SHOT INTO ENEMY WATERS... AND SINK THEIR ${ship.name}!`;
-
-      showShipSunk(ship.position, sq.parentNode);
-    } else {
-      msg = `YOU FIRE A SHOT INTO ENEMY WATERS... AND SINK THEIR ${ship.name}! CONGRATULATIONS, YOU SANK THE LAST ENEMY SHIP!`;
-
-      showShipSunk(ship.position, sq.parentNode);
-
-      plyr.winner = true;
-
-      setTimeout(() => {
-        promptWrapper.classList.add('disappear');
-        gridContainer.classList.add('disappear');
-      }, 5000);
-      setTimeout(() => {
-        promptWrapper.remove();
-        gridContainer.remove();
-        main.append(declareWinner(plyr.name));
-
-        const resetBtn = document.getElementById('reset-btn');
-        resetBtn.onclick = () => {
-          const main = document.querySelector('main');
-          const winnerSection = document.querySelector('.winner-section');
-          winnerSection.remove();
-          main.append(startForm());
-          initNewGame();
-        };
-      }, 5900);
-    }
-  }
-
-  msgPlayer(msg);
-}
-
-function computerAttack(plyr, grid) {
-  const promptWrapper = document.querySelector('.prompt-wrapper');
-  const gridContainer = document.querySelector('.grid-container');
-  const main = document.querySelector('main');
-
-  setTimeout(() => {
-    let msg;
-    plyr.autoAttack();
-    const attackCoord = plyr.reportAttackCoord();
-    const result = plyr.reportAttackResult2(attackCoord);
-
-    const sq = grid.querySelector(`[data-nmbr="${attackCoord}"]`);
-    sq.append(markShot());
-
-    if (result === 'miss') {
-      sq.firstChild.classList.add('miss');
-      msg = 'THE ENEMY FIRES A SHOT INTO YOUR WATERS... AND MISSES!';
-    } else {
-      sq.firstChild.classList.add('hit');
-
-      const ship = plyr.identifyEnemyShip(attackCoord);
-
-      if (result === 'hit') {
-        msg = `THE ENEMY FIRES A SHOT INTO YOUR WATERS... AND HITS YOUR ${ship.name}!`;
-      } else if (result === 'sunk') {
-        msg = `THE ENEMY FIRES A SHOT INTO YOUR WATERS... AND SINKS YOUR ${ship.name}!`;
-
-        showShipSunk(ship.position, sq.parentNode);
-      } else {
-        msg = `THE ENEMY FIRES A SHOT INTO YOUR WATERS... AND SINKS YOUR ${ship.name}! YOU ARE DEFEATED!`;
-
-        showShipSunk(ship.position, sq.parentNode);
-
-        plyr.winner = true;
-
-        setTimeout(() => {
-          promptWrapper.classList.add('disappear');
-          gridContainer.classList.add('disappear');
-        }, 5000);
-        setTimeout(() => {
-          promptWrapper.remove();
-          gridContainer.remove();
-          main.append(declareWinner(plyr.name));
-
-          const resetBtn = document.getElementById('reset-btn');
-          resetBtn.onclick = () => {
-            const main = document.querySelector('main');
-            const winnerSection = document.querySelector('.winner-section');
-            winnerSection.remove();
-            main.append(startForm());
-            initNewGame();
-          };
-        }, 5900);
-      }
-    }
-
-    msgPlayer(msg);
-  }, 1200);
-}
-
-function startBattle(plyr1, plyr2, turnCount = 0) {
+function startGame(plyr1, plyr2, turnCount = 0) {
   let msg;
   let player;
   let enemyWaters;
-
-  let winnerDeclared;
+  let winner;
 
   if (turnCount === 0) {
-    console.log(plyr2.board.fleet);
+    // console.log(plyr2.board.fleet);
 
     msg = `ENEMY DETECTED, AWAITING ORDERS ADMIRAL...`;
     msgPlayer(msg);
@@ -174,47 +47,120 @@ function startBattle(plyr1, plyr2, turnCount = 0) {
   if (turnCount % 2 === 0) {
     player = plyr1;
     enemyWaters = document.querySelector('.plyr2');
-
-    winnerDeclared = plyr2.winner;
+    winner = plyr2.winner ? plyr2.name : undefined;
   } else {
     player = plyr2;
     enemyWaters = document.querySelector('.plyr1');
-
-    winnerDeclared = plyr1.winner;
+    winner = plyr1.winner ? plyr1.name : undefined;
   }
 
-  if (player === plyr1) {
-    if (!winnerDeclared) {
+  if (!winner) {
+    if (player === plyr1) {
       enemyWaters.onclick = (e) => {
         const targSq = e.target.closest('.sq');
         if (targSq) {
           const turn = playerAttack(player, targSq);
 
-          if (turn != 'repeat') {
+          if (turn !== 'repeat') {
             enemyWaters.onclick = null;
-
             setTimeout(() => {
-              startBattle(plyr1, plyr2, (turnCount += 1));
+              startGame(plyr1, plyr2, (turnCount += 1));
             }, 2600);
           }
         }
       };
-    }
-  } else {
-    if (!winnerDeclared) {
+    } else {
       msg = `THE ENEMY IS AIMING...`;
       msgPlayer(msg);
 
-      computerAttack(player, enemyWaters);
+      setTimeout(() => {
+        computerAttack(player, enemyWaters);
+      }, 1200);
 
       setTimeout(() => {
-        startBattle(plyr1, plyr2, (turnCount += 1));
+        startGame(plyr1, plyr2, (turnCount += 1));
       }, 2600);
     }
+  } else {
+    setTimeout(() => {
+      const main = document.querySelector('main');
+      main.textContent = '';
+      main.append(declareWinner(winner));
+
+      const resetBtn = document.getElementById('reset-btn');
+      resetBtn.onclick = () => {
+        initNewGame();
+      };
+    }, 3000);
   }
 }
 
-function startGame(name) {
+function computerAttack(plyr, grid) {
+  let msg;
+  plyr.autoAttack();
+  const attackCoord = plyr.reportAttackCoord();
+
+  const sq = grid.querySelector(`[data-nmbr="${attackCoord}"]`);
+  sq.append(markShot());
+
+  const result = plyr.reportAttackResult(attackCoord);
+  if (result === 'miss') {
+    sq.firstChild.classList.add('miss');
+    msg = 'THE ENEMY FIRES A SHOT INTO YOUR WATERS... AND MISSES!';
+  } else {
+    sq.firstChild.classList.add('hit');
+    const ship = plyr.identifyEnemyShip(attackCoord);
+    if (result === 'hit') {
+      msg = `THE ENEMY FIRES A SHOT INTO YOUR WATERS... AND HITS YOUR ${ship.name}!`;
+    } else {
+      showShipSunk(ship.position, sq.parentNode);
+      if (result === 'sunk') {
+        msg = `THE ENEMY FIRES A SHOT INTO YOUR WATERS... AND SINKS YOUR ${ship.name}!`;
+      } else {
+        msg = `THE ENEMY FIRES A SHOT INTO YOUR WATERS... AND SINKS YOUR ${ship.name}! YOU ARE DEFEATED!`;
+        plyr.winner = true;
+      }
+    }
+  }
+  msgPlayer(msg);
+}
+
+function playerAttack(plyr, sq) {
+  let msg;
+  const attackCoord = +sq.dataset.nmbr;
+
+  if (plyr.attacks.includes(attackCoord)) {
+    return 'repeat';
+  }
+
+  plyr.attack(attackCoord);
+  sq.append(markShot());
+  sq.classList.toggle('lock');
+  sq.classList.toggle('target');
+
+  const result = plyr.reportAttackResult(attackCoord);
+  if (result === 'miss') {
+    sq.firstChild.classList.add('miss');
+    msg = `YOU FIRE A SHOT INTO ENEMY WATERS... AND MISS!`;
+  } else {
+    sq.firstChild.classList.add('hit');
+    const ship = plyr.identifyEnemyShip(attackCoord);
+    if (result === 'hit') {
+      msg = `YOU FIRE A SHOT INTO ENEMY WATERS... AND HIT AN ENEMY SHIP!`;
+    } else {
+      showShipSunk(ship.position, sq.parentNode);
+      if (result === 'sunk') {
+        msg = `YOU FIRE A SHOT INTO ENEMY WATERS... AND SINK THEIR ${ship.name}!`;
+      } else {
+        msg = `YOU FIRE A SHOT INTO ENEMY WATERS... AND SINK THEIR ${ship.name}! CONGRATULATIONS, YOU SANK THE LAST ENEMY SHIP!`;
+        plyr.winner = true;
+      }
+    }
+  }
+  msgPlayer(msg);
+}
+
+function setBoard(name) {
   const player1 = new Player(name);
   const player2 = new AIPlayer();
 
@@ -234,48 +180,42 @@ function startGame(name) {
   });
 }
 
-function selectAction(player, opponent, event) {
-  const playerShips = player.board.fleet;
+function selectAction(plyr1, plyr2, e) {
+  const playerShips = plyr1.board.fleet;
 
-  if (event.target.id === 'axis') {
-    changeAxis(event);
-  } else if (event.target.id === 'clear') {
-    player.resetFleet();
+  if (e.target.id === 'axis') {
+    changeAxis(e);
+  } else if (e.target.id === 'clear') {
+    plyr1.resetFleet();
     removeShipPositions();
-    placePlayerShips(player);
-  } else if (event.target.id === 'battle') {
+    placePlayerShips(plyr1);
+  } else if (e.target.id === 'battle') {
     if (playerShips[playerShips.length - 1].position.length > 0) {
       const positContainer = document.querySelector('.posit-container');
       positContainer.style.animation =
         '.5s ease-in 0s 1 normal forwards running fadeout';
 
-      event.target.disabled = true;
-      event.target.classList.add('undisable');
+      e.target.disabled = true;
 
       setTimeout(() => {
         positContainer.parentNode.append(createBattleGrids());
         positContainer.remove();
-
-        showFleetPosition(player);
-        startBattle(player, opponent);
+        showFleetPosition(plyr1);
+        startGame(plyr1, plyr2);
       }, 500);
 
       return;
     }
 
-    let msg = `Admiral ${player.name}, you must prepare your fleet for battle. Please position your ships.`;
+    const msg = `Admiral ${plyr1.name}, you must prepare your fleet for battle. Please position your ships.`;
     msgPlayer(msg.toUpperCase());
   } else {
-    // random btn
-
     removeShipPositions();
-    player.autoPositionFleet();
+    plyr1.autoPositionFleet();
     playerShips.forEach((ship) => {
       showShipPosition(ship.position);
     });
-
-    // Shows msg to press battle, add index
-    placePlayerShips(player, playerShips.length);
+    placePlayerShips(plyr1, playerShips.length);
   }
 }
 
@@ -295,10 +235,10 @@ function placePlayerShips(player, index = 0, exclude = []) {
 
     let shipPosition = [];
     grid.onmouseover = (e) => {
-      let sq = e.target.closest('.sq');
+      const sq = e.target.closest('.sq');
       if (sq) {
         const startCoord = +sq.dataset.nmbr;
-        const axis = document.querySelector('#axis').dataset.axis;
+        const { axis } = document.querySelector('#axis').dataset;
         const max = getCeiling(startCoord, axis);
         shipPosition = [...getPositionCoords(currentShip, startCoord, axis)];
 
@@ -316,7 +256,6 @@ function placePlayerShips(player, index = 0, exclude = []) {
         exclude.push(...currentShip.position);
 
         showShipPosition(shipPosition);
-        // showShipOutline(shipPosition);
 
         if (currentShip.position.length > 0) {
           placePlayerShips(player, (index += 1), exclude);
@@ -331,29 +270,29 @@ function placePlayerShips(player, index = 0, exclude = []) {
 }
 
 export default function initNewGame() {
-  const submitBtn = document.querySelector('form > button');
-  submitBtn.addEventListener('click', processForm);
-}
-
-function processForm(e) {
   const main = document.querySelector('main');
+  main.textContent = '';
+  main.append(startForm());
+
+  const submitBtn = document.querySelector('form > button');
   const form = document.querySelector('form');
   const nameInput = document.getElementById('input-name');
   const errMsg = document.querySelector('form > p');
 
-  if (nameInput.validity.valueMissing) {
-    errMsg.style.visibility = 'visible';
-    return;
-  }
+  submitBtn.addEventListener('click', (e) => {
+    if (nameInput.validity.valueMissing) {
+      errMsg.style.visibility = 'visible';
+      return;
+    }
 
-  e.target.disabled = true;
-  e.target.classList.add('undisable');
-  errMsg.style.visibility = 'hidden';
-  form.classList.add('disappear');
+    e.target.disabled = true;
+    errMsg.style.visibility = 'hidden';
+    form.classList.add('disappear');
 
-  setTimeout(() => {
-    form.remove();
-    main.append(playerPrompt(), createPositUI());
-    startGame(nameInput.value);
-  }, 900);
+    setTimeout(() => {
+      form.remove();
+      main.append(playerPrompt(), createPositUI());
+      setBoard(nameInput.value);
+    }, 900);
+  });
 }
