@@ -1,7 +1,7 @@
 .posit-container {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 2vmin;
   align-items: center;
   animation: 2s ease-in 0s 1 normal none running fadein;
 }
@@ -9,6 +9,11 @@
 .btns-container {
   display: flex;
   gap: 1rem;
+}
+
+.btns-container > button {
+  max-height: 8rem;
+  max-width: 14rem;
 }
 
 .grid {

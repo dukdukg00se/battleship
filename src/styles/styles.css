@@ -32,21 +32,22 @@ header {
   min-height: 10rem;
   display: flex;
   justify-content: center;
-  padding: 2rem;
+  padding: 3rem 2rem 2rem;
 }
 
-header > div {
-  position: relative;
+header > h1 {
+  /* position: relative; */
   display: flex;
   justify-content: center;
   width: 80%;
 }
 
-header > div > img:first-of-type {
+header > h1 > img:first-of-type {
   object-fit: scale-down;
   object-position: center;
   height: 100%;
-  width: 80%;
+  width: 90%;
+  min-width: 35rem;
 }
 
 main {
@@ -137,8 +138,24 @@ button {
   border-bottom-right-radius: 50%;
 }
 
-@media (max-height: 500px) {
+@media (max-height: 500px), (max-width: 500px) {
   main {
-    padding-top: 3.6rem;
+    padding-top: 2rem;
+  }
+
+  header > h1 > img:first-of-type {
+    width: 5rem;
+  }
+
+  button {
+    height: 2.2rem;
+    width: 5rem;
+    font-size: 1.2rem;
+  }
+}
+
+@media (min-height: 1600px) {
+  button {
+    font-size: 3.7rem;
   }
 }
