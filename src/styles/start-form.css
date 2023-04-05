@@ -12,7 +12,9 @@ form {
   font-size: 3vmin;
   padding: 1rem;
   width: 30vmin;
+  min-width: 20rem;
   height: 6vmin;
+  min-height: 4rem;
 }
 
 form > p {
@@ -21,25 +23,23 @@ form > p {
 }
 
 form > button {
-  height: 6vmin;
-  width: 15vmin;
   font-size: 3vmin;
+  width: 15vmin;
+  min-width: 10rem;
+  height: 6vmin;
+  min-height: 4rem;
 }
 
 @media (max-width: 675px), (max-height: 680px) {
   form {
-    font-size: 2rem;
+    font-size: 2.7rem;
   }
 
   #input-name {
-    height: 4.6rem;
-    width: 19rem;
     font-size: 2rem;
   }
 
   form > button {
-    height: 3.7rem;
-    width: 9rem;
     font-size: 1.9rem;
   }
 }
