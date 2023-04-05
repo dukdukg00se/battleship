@@ -38,12 +38,12 @@ function removeShipPositions() {
 
 function showShipPosition(coords, grid = document.querySelector('.grid')) {
   const dir = coords[0] + 1 === coords[1] ? 'x' : 'y';
-  
+
   let i = 1;
   coords.forEach((coord) => {
     const sq = grid.querySelector(`[data-nmbr="${coord}"]`);
     sq.className = '';
-    sq.classList.add('sq', 'ship-position')
+    sq.classList.add('sq', 'ship-position');
 
     if (i === 1) {
       if (dir === 'x') {
@@ -65,12 +65,12 @@ function showShipPosition(coords, grid = document.querySelector('.grid')) {
 
 function showShipSunk(coords, grid) {
   const dir = coords[0] + 1 === coords[1] ? 'x' : 'y';
-  
+
   let i = 1;
   coords.forEach((coord) => {
     const sq = grid.querySelector(`[data-nmbr="${coord}"]`);
     sq.className = '';
-    sq.classList.add('sq', 'sunk')
+    sq.classList.add('sq', 'sunk');
 
     if (i === 1) {
       if (dir === 'x') {
@@ -93,16 +93,10 @@ function showShipSunk(coords, grid) {
 function showFleetPosition(player) {
   const playerGrid = document.querySelector(`.plyr1`);
   const ships = player.board.fleet;
-  ships.forEach(ship => {
+  ships.forEach((ship) => {
     showShipPosition(ship.position, playerGrid);
-  })
+  });
 }
-
-
-
-
-
-
 
 export {
   removeShadows,
