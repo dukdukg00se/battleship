@@ -1,13 +1,7 @@
 import Player from './player';
-import {
-  getCeiling,
-  getFloor,
-  genNmbr,
-  isCoordsEligible,
-  isRedundant,
-  pickADir,
-} from './aux-helper-fns';
+import { getCeiling, getFloor } from './aux-helper-fns';
 
+/* eslint-disable default-case */
 export default class AIPlayer extends Player {
   name = 'COMPUTER';
 
@@ -15,175 +9,100 @@ export default class AIPlayer extends Player {
 
   targetDir = 'back';
 
-  // Only called when enemy ship is targeted
-  // Return attack coord based on last hit
-  getGuidedCoord(ship, dir = this.targetDir, excl = this.attacks) {
-
-
-    let coord;
-    const indx = dir === 'back' || dir === 'down' ? ship.damage.length - 1 : 0;
-    const axis = dir === 'back' || dir === 'front' ? 'x' : 'y';
-    const floor = getFloor(ship.damage[indx], axis);
-    const ceil = getCeiling(ship.damage[indx], axis);
-
-    // console.log(ship.name)
-    // console.log(ship.damage)
-    console.log(dir)
-    // console.log(indx)
-
-    if (dir === 'back') {
-      coord = ship.damage[indx] + 1;
-
-      if (excl.includes(coord) || coord < floor || coord > ceil) {
-        this.targetDir = 'front';
-        return this.getGuidedCoord(ship);
-
-      }
-    } 
-    
-    else if (dir === 'front') {
-      coord = ship.damage[indx] - 1;
-
-      if (excl.includes(coord) || coord < floor || coord > ceil) {
-        this.targetDir = 'down';
-        return this.getGuidedCoord(ship);
-
-      }
-    } 
-    
-    else if (dir === 'down') {
-      coord = ship.damage[indx] + 10;
-
-      if (excl.includes(coord) || coord < floor || coord > ceil) {
-        this.targetDir = 'up';
-        return this.getGuidedCoord(ship);
-
-      }
-    } 
-    
-    else if (dir === 'up') {
-      coord = ship.damage[indx] - 10;
-
-      if (excl.includes(coord) || coord < floor || coord > ceil) {
-        this.targetDir = 'back';
-        return this.getGuidedCoord(ship);
-
-      }
-    }
-
-    return coord;
-  }
-
-
-  // Check if the guided coord is a hit
-  // If not, change direction of next hit (targetDir)
-  // calibrateAttack(attackCoord, opp = this.opponent) {
-
-  //   const enemyShipPosits = opp.board.fleet.reduce((coords, ship) => {
-  //     coords.push(...ship.position);
-  //     return coords;
-  //   }, []);
-  //   if (!enemyShipPosits.includes(attackCoord)) {
-  //     if (this.targets.length > 0) {
-  //       switch (this.targetDir) {
-  //         case 'back':
-  //           this.targetDir = 'front';
-  //           break;
-  //         case 'front':
-  //           this.targetDir = 'down';
-  //           break;
-  //         case 'down':
-  //           this.targetDir = 'up';
-  //           break;
-  //         default:
-  //           this.targetDir = 'back';
-  //       }
-  //     }
-  //   }
-
-
-  //   // let hitShip;
-  //   // opp.board.fleet.forEach((ship) => {
-  //   //   ship.position.forEach((coord) => {
-  //   //     if (coord === attackCoord) {
-  //   //       hitShip = ship;
-  //   //     }
-  //   //   });
-  //   // });
-
-  //   // const targetNames = this.targets.reduce((names, oppShip) => {
-  //   //   names.push(oppShip.name);
-  //   //   return names;
-  //   // }, []);
-
-  //   // if (hitShip) {
-  //   //   if (!targetNames.includes(hitShip.name)) {
-  //   //     this.targets.push(hitShip);
-  //   //   }
-
-  //   //   if (hitShip.damage.length + 1 >= hitShip.length) {
-  //   //     this.targets.shift();
-  //   //   }
-  //   // }
-  // }
-
-
-  updateTargetsList(attackCoord, targets, enemyShips = this.opponent.board.fleet) {
+  updateTargetsList(
+    attackCoord,
+    targs,
+    enemyShips = this.opponent.board.fleet
+  ) {
     let hitShip;
+
     enemyShips.forEach((ship) => {
       if (ship.position.includes(attackCoord)) hitShip = ship;
     });
 
     if (hitShip) {
-      if (!targets.includes(hitShip)) {
-        this.targets.push(hitShip);
+      // Below checks if same obj in arr;
+      // Reminder to self, objs are structured data not primitives
+
+      // If ship obj reference not in targ arr then add
+      if (!targs.includes(hitShip)) {
+        targs.push(hitShip);
       }
 
       if (hitShip.damage.length >= hitShip.length) {
-        console.log(hitShip);
-        console.log(targets);
-
-        // MAKE SURE REMOVE RIGHT SHIP
-        this.targets.shift();
+        // Due to how ai targeting currently implemented,
+        // most times, sunk ship will be first ship in targ array.
+        // However, in case it's not, search for index of hitship
+        // then splice it out
+        const index = targs.indexOf(hitShip);
+        targs.splice(index, 1);
       }
     }
   }
 
-  autoAttack(targets = this.targets) {
+  updateTargetingDir(dir) {
+    switch (dir) {
+      case 'back':
+        this.targetDir = 'front';
+        break;
+      case 'front':
+        this.targetDir = 'down';
+        break;
+      case 'down':
+        this.targetDir = 'up';
+        break;
+      default:
+        this.targetDir = 'back';
+    }
+  }
 
-    // If there are targets then get a guided coord, else random coord
+  getGuidedCoord(ship, dir = this.targetDir, excl = this.attacks) {
+    const indx = dir === 'back' || dir === 'down' ? ship.damage.length - 1 : 0;
+    const axis = dir === 'back' || dir === 'front' ? 'x' : 'y';
+    const floor = getFloor(ship.damage[indx], axis);
+    const ceil = getCeiling(ship.damage[indx], axis);
+    let coord;
+
+    switch (dir) {
+      case 'back':
+        coord = ship.damage[indx] + 1;
+        break;
+      case 'front':
+        coord = ship.damage[indx] - 1;
+        break;
+      case 'down':
+        coord = ship.damage[indx] + 10;
+        break;
+      case 'up':
+        coord = ship.damage[indx] - 10;
+    }
+
+    if (excl.includes(coord) || coord < floor || coord > ceil) {
+      this.updateTargetingDir(dir);
+      return this.getGuidedCoord(ship);
+    }
+
+    return coord;
+  }
+
+  // This method does 3 things:
+  // - generate random or targeted attack coord
+  // - attack opponent
+  // - assess result of attack for next turn
+  //  - ** this should prob be broken up! **
+  autoAttack(targets = this.targets) {
     const attackCoord =
       targets.length < 1
         ? this.getRandomCoord()
         : this.getGuidedCoord(targets[0]);
-    // this.calibrateAttack(attackCoord);
+
     this.attack(attackCoord);
 
     const result = this.reportAttackResult(attackCoord);
-
     if (result === 'hit' || result === 'sunk' || result === 'destroyed') {
-      this.updateTargetsList(attackCoord, targets)
+      this.updateTargetsList(attackCoord, targets);
+    } else if (targets.length > 0) {
+      this.updateTargetingDir(this.targetDir);
     }
-
-    if (targets.length > 0) {
-      if (result === 'miss') {
-        switch (this.targetDir) {
-          case 'back':
-            this.targetDir = 'front';
-            break;
-          case 'front':
-            this.targetDir = 'down';
-            break;
-          case 'down':
-            this.targetDir = 'up';
-            break;
-          default:
-            this.targetDir = 'back';
-        }
-      }
-    }
-
-    // console.log(targets)
-
   }
 }
