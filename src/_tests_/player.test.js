@@ -1,4 +1,4 @@
-import Player from '../modules/player';
+import Player from '../modules/data/player';
 
 describe('Player object', () => {
   let player1;

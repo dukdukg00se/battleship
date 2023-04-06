@@ -1,4 +1,4 @@
-import Ship from '../modules/ship';
+import Ship from '../modules/data/ship';
 
 describe('Ship object', () => {
   const destroyer = new Ship('Destroyer', 3);
