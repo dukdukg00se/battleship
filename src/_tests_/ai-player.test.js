@@ -71,7 +71,7 @@ describe('aiPlayer object', () => {
     });
   });
 
-  describe('Get targeted attack coord after hitting a ship', () => {
+  describe('Generate correct attack coordinates', () => {
     let enemyShip1;
     let enemyShip2;
 
@@ -85,37 +85,33 @@ describe('aiPlayer object', () => {
       enemyShip2.damage = [26];
     });
 
+    test('Get random coord with no active targets', () => {
+      expect(computer.getAttackCoord()).toBeLessThanOrEqual(100);
+    });
+
     test('Get succeeding hit ship coord, x-axis', () => {
-      expect(computer.getGuidedCoord(enemyShip1)).toEqual(10);
+      computer.targets.push(enemyShip1);
+      expect(computer.getAttackCoord()).toEqual(10);
     });
 
     test('Get preceding hit ship coord, x-axis', () => {
+      enemyShip1.damage = [9, 10];
       computer.attacks = [9, 10];
-      expect(computer.getGuidedCoord(enemyShip1)).toEqual(8);
+      computer.targets.push(enemyShip1);
+
+      expect(computer.getAttackCoord()).toEqual(8);
     });
 
     test('Get succeeding hit ship coord, y-axis', () => {
       computer.attacks = [25, 26, 27];
-      expect(computer.getGuidedCoord(enemyShip2)).toEqual(36);
+      computer.targets.push(enemyShip2);
+      expect(computer.getAttackCoord()).toEqual(36);
     });
 
     test('Get preceding hit ship coord, y-axis', () => {
       computer.attacks = [25, 26, 27, 36];
-      expect(computer.getGuidedCoord(enemyShip2)).toEqual(16);
-    });
-  });
-
-  describe('Check methods involved in ai attacking called correctly', () => {
-    // test('Call getRandomCoord() if there are no targets', () => {
-    //   const getRandomCoord = jest.spyOn(computer, 'getRandomAttack');
-    //   computer.autoAttack();
-    //   expect(getRandomCoord).toHaveBeenCalled();
-    // });
-
-    test('Call getGuidedCoord() if there are targets', () => {
-      const getGuidedCoord = jest.spyOn(computer, 'getGuidedCoord');
-      computer.autoAttack();
-      expect(getGuidedCoord).toHaveBeenCalled();
+      computer.targets.push(enemyShip2);
+      expect(computer.getAttackCoord()).toEqual(16);
     });
   });
 });
