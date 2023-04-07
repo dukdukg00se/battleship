@@ -95,19 +95,53 @@ function startGame(plyr1, plyr2, turnCount = 0) {
   }
 }
 
+// function computerAttack(plyr, grid) {
+//   let msg;
+//   plyr.autoAttack();
+//   const attackCoord = plyr.reportAttackCoord();
+
+//   const sq = grid.querySelector(`[data-nmbr="${attackCoord}"]`);
+//   sq.append(markShot());
+
+//   const result = plyr.reportAttackResult(attackCoord);
+//   if (result === 'miss') {
+//     sq.firstChild.classList.add('miss');
+//     msg = 'THE ENEMY FIRES A SHOT INTO YOUR WATERS... AND MISSES!';
+//   } else {
+//     sq.firstChild.classList.add('hit');
+//     const ship = plyr.identifyEnemyShip(attackCoord);
+//     if (result === 'hit') {
+//       msg = `THE ENEMY FIRES A SHOT INTO YOUR WATERS... AND HITS YOUR ${ship.name}!`;
+//     } else {
+//       showShipSunk(ship.position, sq.parentNode);
+//       if (result === 'sunk') {
+//         msg = `THE ENEMY FIRES A SHOT INTO YOUR WATERS... AND SINKS YOUR ${ship.name}!`;
+//       } else {
+//         msg = `THE ENEMY FIRES A SHOT INTO YOUR WATERS... AND SINKS YOUR ${ship.name}! YOU ARE DEFEATED!`;
+//         plyr.winner = true;
+//       }
+//     }
+//   }
+//   msgPlayer(msg);
+// }
+
 function computerAttack(plyr, grid) {
   let msg;
-  plyr.autoAttack();
-  const attackCoord = plyr.reportAttackCoord();
-
+  const attackCoord = plyr.getAttackCoord()
   const sq = grid.querySelector(`[data-nmbr="${attackCoord}"]`);
+
+  plyr.attack(attackCoord);
   sq.append(markShot());
 
   const result = plyr.reportAttackResult(attackCoord);
   if (result === 'miss') {
+    if (plyr.targets.length > 0) plyr.updateTargetingDir();
+
     sq.firstChild.classList.add('miss');
     msg = 'THE ENEMY FIRES A SHOT INTO YOUR WATERS... AND MISSES!';
   } else {
+    plyr.updateTargetsList(attackCoord);
+
     sq.firstChild.classList.add('hit');
     const ship = plyr.identifyEnemyShip(attackCoord);
     if (result === 'hit') {
@@ -124,6 +158,12 @@ function computerAttack(plyr, grid) {
   }
   msgPlayer(msg);
 }
+
+
+
+
+
+
 
 function playerAttack(plyr, sq) {
   let msg;

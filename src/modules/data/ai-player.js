@@ -10,14 +10,14 @@ export default class AIPlayer extends Player {
   targetDir = 'back';
 
   updateTargetsList(
-    attackCoord,
-    targs,
+    coord,
+    targs = this.targets,
     enemyShips = this.opponent.board.fleet
   ) {
     let hitShip;
 
     enemyShips.forEach((ship) => {
-      if (ship.position.includes(attackCoord)) hitShip = ship;
+      if (ship.position.includes(coord)) hitShip = ship;
     });
 
     if (hitShip) {
@@ -40,7 +40,7 @@ export default class AIPlayer extends Player {
     }
   }
 
-  updateTargetingDir(dir) {
+  updateTargetingDir(dir = this.targetDir) {
     switch (dir) {
       case 'back':
         this.targetDir = 'front';
@@ -85,24 +85,12 @@ export default class AIPlayer extends Player {
     return coord;
   }
 
-  // This method does 3 things:
-  // - generate random or targeted attack coord
-  // - attack opponent
-  // - assess result of attack for next turn
-  //  - ** this should prob be broken up! **
-  autoAttack(targets = this.targets) {
-    const attackCoord =
+  getAttackCoord(targets = this.targets) {
+    const coord =
       targets.length < 1
         ? this.getRandomCoord()
         : this.getGuidedCoord(targets[0]);
 
-    this.attack(attackCoord);
-
-    const result = this.reportAttackResult(attackCoord);
-    if (result === 'hit' || result === 'sunk' || result === 'destroyed') {
-      this.updateTargetsList(attackCoord, targets);
-    } else if (targets.length > 0) {
-      this.updateTargetingDir(this.targetDir);
-    }
+    return coord;
   }
 }
