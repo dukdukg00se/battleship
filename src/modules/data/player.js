@@ -40,10 +40,10 @@ export default class Player {
     return result;
   }
 
-  reportAttackCoord() {
-    const { attacks } = this;
-    return attacks[attacks.length - 1];
-  }
+  // reportAttackCoord() {
+  //   const { attacks } = this;
+  //   return attacks[attacks.length - 1];
+  // }
 
   identifyEnemyShip(attackCoord) {
     const { fleet } = this.opponent.board;
