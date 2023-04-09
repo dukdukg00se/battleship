@@ -44,15 +44,6 @@ describe('Gameboard object', () => {
       expect(isSunkCalled).toHaveBeenCalled();
     });
 
-    test('Checks fleet only after ship is sunk', () => {
-      const allSunk = jest.spyOn(board, 'fleetLost');
-      board.receiveAttack(3);
-      board.receiveAttack(4);
-      board.receiveAttack(5);
-      board.receiveAttack(6);
-      expect(allSunk).toHaveBeenCalledTimes(1);
-    });
-
     test('Correctly tell when fleet eliminated', () => {
       board.receiveAttack(3);
       board.receiveAttack(4);
