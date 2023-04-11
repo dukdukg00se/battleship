@@ -8,6 +8,26 @@ import AIPlayer from './data/ai-player';
 
 /* eslint-disable no-param-reassign, no-use-before-define */
 
+function setBoard(name) {
+  const player1 = new Player(name);
+  const player2 = new AIPlayer();
+
+  player1.opponent = player2;
+  player2.opponent = player1;
+  player1.assembleFleet();
+  player2.assembleFleet();
+  player2.autoPositionFleet();
+
+  domPosit.placePlayerShips(player1);
+
+  const btns = document.querySelectorAll('button');
+  btns.forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      respondToBtn(player1, player2, e);
+    });
+  });
+}
+
 function respondToBtn(plyr1, plyr2, e) {
   const playerShips = plyr1.board.fleet;
 
@@ -44,60 +64,6 @@ function respondToBtn(plyr1, plyr2, e) {
     });
     domPosit.placePlayerShips(plyr1, playerShips.length);
   }
-}
-
-function setBoard(name) {
-  const player1 = new Player(name);
-  const player2 = new AIPlayer();
-
-  player1.opponent = player2;
-  player2.opponent = player1;
-  player1.assembleFleet();
-  player2.assembleFleet();
-  player2.autoPositionFleet();
-
-  domPosit.placePlayerShips(player1);
-
-  const btns = document.querySelectorAll('button');
-  btns.forEach((btn) => {
-    btn.addEventListener('click', (e) => {
-      respondToBtn(player1, player2, e);
-    });
-  });
-}
-
-function initNewGame() {
-  const main = document.querySelector('main');
-  main.textContent = '';
-  main.append(startForm());
-
-  const submitBtn = document.querySelector('form > button');
-  const form = document.querySelector('form');
-  const nameInput = document.getElementById('input-name');
-  const errMsg = document.querySelector('form > p');
-
-  nameInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-    }
-  });
-
-  submitBtn.addEventListener('click', (e) => {
-    if (nameInput.validity.valueMissing) {
-      errMsg.style.visibility = 'visible';
-      return;
-    }
-
-    e.target.disabled = true;
-    errMsg.style.visibility = 'hidden';
-    form.classList.add('disappear');
-
-    setTimeout(() => {
-      form.remove();
-      main.append(domPrompt.createPlayerPrompt(), domPosit.createPositUI());
-      setBoard(nameInput.value);
-    }, 900);
-  });
 }
 
 function startBattle(plyr1, plyr2, turnCount = 0) {
@@ -160,6 +126,40 @@ function startBattle(plyr1, plyr2, turnCount = 0) {
       };
     }, 3000);
   }
+}
+
+function initNewGame() {
+  const main = document.querySelector('main');
+  main.textContent = '';
+  main.append(startForm());
+
+  const submitBtn = document.querySelector('form > button');
+  const form = document.querySelector('form');
+  const nameInput = document.getElementById('input-name');
+  const errMsg = document.querySelector('form > p');
+
+  nameInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+    }
+  });
+
+  submitBtn.addEventListener('click', (e) => {
+    if (nameInput.validity.valueMissing) {
+      errMsg.style.visibility = 'visible';
+      return;
+    }
+
+    e.target.disabled = true;
+    errMsg.style.visibility = 'hidden';
+    form.classList.add('disappear');
+
+    setTimeout(() => {
+      form.remove();
+      main.append(domPrompt.createPlayerPrompt(), domPosit.createPositUI());
+      setBoard(nameInput.value);
+    }, 900);
+  });
 }
 
 export default initNewGame;
