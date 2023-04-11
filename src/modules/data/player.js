@@ -17,6 +17,55 @@ export default class Player {
     this.opponent = null;
   }
 
+  getRandomCoord(exclude = this.attacks, gridSize = 100) {
+    let coord = genNmbr(gridSize);
+    while (exclude.includes(coord)) {
+      coord = genNmbr(gridSize);
+    }
+    return coord;
+  }
+
+  assembleFleet() {
+    const allShips = [
+      new Ship('CARRIER', 5),
+      new Ship('BATTLESHIP', 4),
+      new Ship('DESTROYER', 3),
+      new Ship('SUBMARINE', 3),
+      new Ship('PATROL BOAT', 2),
+    ];
+
+    const { fleet } = this.board;
+    allShips.forEach((ship) => fleet.push(ship));
+  }
+
+  randomPlace(ship, exclude) {
+    const startCoord = this.getRandomCoord(exclude);
+    const axis = pickADir();
+    const ceil = getCeiling(startCoord, axis);
+    const shipPosition = [...getPositionCoords(ship, startCoord, axis)];
+
+    if (!isCoordsEligible(exclude, shipPosition, ceil)) {
+      return this.randomPlace(ship, exclude);
+    }
+
+    return shipPosition;
+  }
+
+  autoPositionFleet(ships = this.board.fleet) {
+    const takenPosits = [];
+    ships.forEach((ship) => {
+      ship.position = this.randomPlace(ship, takenPosits);
+      takenPosits.push(...ship.position);
+    });
+  }
+
+  resetFleet() {
+    const { fleet } = this.board;
+    fleet.forEach((ship) => {
+      ship.position = [];
+    });
+  }
+
   attack(coord) {
     const opp = this.opponent;
     this.attacks.push(coord);
@@ -40,11 +89,6 @@ export default class Player {
     return result;
   }
 
-  // reportAttackCoord() {
-  //   const { attacks } = this;
-  //   return attacks[attacks.length - 1];
-  // }
-
   identifyEnemyShip(attackCoord) {
     const { fleet } = this.opponent.board;
     let targetShip;
@@ -53,54 +97,5 @@ export default class Player {
     });
 
     return targetShip;
-  }
-
-  assembleFleet() {
-    const allShips = [
-      new Ship('CARRIER', 5),
-      new Ship('BATTLESHIP', 4),
-      new Ship('DESTROYER', 3),
-      new Ship('SUBMARINE', 3),
-      new Ship('PATROL BOAT', 2),
-    ];
-
-    const { fleet } = this.board;
-    allShips.forEach((ship) => fleet.push(ship));
-  }
-
-  resetFleet() {
-    const { fleet } = this.board;
-    fleet.forEach((ship) => {
-      ship.position = [];
-    });
-  }
-
-  getRandomCoord(exclude = this.attacks, gridSize = 100) {
-    let coord = genNmbr(gridSize);
-    while (exclude.includes(coord)) {
-      coord = genNmbr(gridSize);
-    }
-    return coord;
-  }
-
-  place(ship, exclude) {
-    const startCoord = this.getRandomCoord(exclude);
-    const axis = pickADir();
-    const ceil = getCeiling(startCoord, axis);
-    const shipPosition = [...getPositionCoords(ship, startCoord, axis)];
-
-    if (!isCoordsEligible(exclude, shipPosition, ceil)) {
-      return this.place(ship, exclude);
-    }
-
-    return shipPosition;
-  }
-
-  autoPositionFleet(ships = this.board.fleet) {
-    const takenPosits = [];
-    ships.forEach((ship) => {
-      ship.position = this.place(ship, takenPosits);
-      takenPosits.push(...ship.position);
-    });
   }
 }
