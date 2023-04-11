@@ -76,6 +76,12 @@ function initNewGame() {
   const nameInput = document.getElementById('input-name');
   const errMsg = document.querySelector('form > p');
 
+  nameInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+    }
+  });
+
   submitBtn.addEventListener('click', (e) => {
     if (nameInput.validity.valueMissing) {
       errMsg.style.visibility = 'visible';
