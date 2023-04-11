@@ -1,3 +1,4 @@
+import '../../styles/battle-section.css';
 import {
   createGrid,
   addClassToSqs,
