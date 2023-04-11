@@ -4,7 +4,6 @@ import {
   showShipPosition,
 } from './positioning-section';
 import { msgPlayer } from './player-prompt';
-import '../../styles/battle-section.css';
 
 /* eslint-disable consistent-return, no-param-reassign */
 
