@@ -27,7 +27,7 @@ Nevertheless, the different tests did aid during refactoring and contributed to 
 - Add ship images and sounds. Several ship images and sound assets are saved but not currently used. In the future, add sound effects and use ship images for placement
 - Add further effects such as animations for a missed/hit shot
 - Add a two player mode
-- Improve AI play. At present, computer isn't able to compare ship length to number of empty squares. This gives the player an advantage. For example, this leads to situations where it will fire on a square without any adjacent open spots, making a ship there impossible.
+- Improve AI play. At present, computer isn't able to compare ship length to number of empty squares. This gives the player an advantage. For example, this leads to situations where it will fire on a square without any adjacent open spots, making a ship there impossible
 - Code can always be improved
 
 ## Helpful Links
