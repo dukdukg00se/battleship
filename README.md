@@ -16,7 +16,7 @@ My take on the classic strategy guessing game. Enter player name, position your 
 
 ## Notes
 
-Initially started this project with the test-first approach in mind. However, as I started to build out the application I eventually found it difficult to maintain this approach. I believe, additional planning ahead of time will help.
+Initially started this project with the test-first approach in mind. However, as I started to build out the application I eventually found it difficult to maintain this approach. In the future, I believe, additional planning ahead of time will help.
 
 Nevertheless, the different tests did aid during refactoring and contributed to better understanding and better code.
 
